@@ -16,9 +16,11 @@ import {
 } from "react-native";
 import { Icon } from "./devicesIcons";
 import { ThemeContext } from "../../services/theme.context";
-
+//ceck wendo
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
+
+
 
 export const AddDeviceModal = ({ onAddDevice, setOnAddDevice }) => {
   const plugs = [
