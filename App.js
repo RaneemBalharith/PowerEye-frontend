@@ -1,20 +1,25 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import StackNavigator from './src/navigation/stackNavigator';
+import { I18nManager} from 'react-native';
 
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-     <Text>Hi, new app powereye</Text>
-    </View>
+
+I18nManager.allowRTL(false);
+const Stack = createStackNavigator();
+
+const App = () =>{
+  return(
+  
+    <NavigationContainer>
+      <StackNavigator />
+    </NavigationContainer>
+    
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  }
-});
 
+export default App; 
