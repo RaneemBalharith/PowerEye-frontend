@@ -16,7 +16,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.expo.PowerEye"
+      "bundleIdentifier": "com.rem.PowerEye"
     },
     "android": {
       "googleServicesFile": "./google-services.json",
