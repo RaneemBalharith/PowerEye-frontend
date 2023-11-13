@@ -88,5 +88,31 @@ const styles = StyleSheet.create({
   }
 });
 
+const firebaseConfig = {
+  apiKey: 'AIzaSyDIYWrlTYkKUlSweIFzYTYrpdUq17j9QFk',
+  // authDomain: 'YOUR_AUTH_DOMAIN',
+  projectId: 'powereye1-e599e',
+  storageBucket: 'powereye1-e599e.appspot.com',
+  messagingSenderId: '1053939269851',
+  // appId: 'YOUR_APP_ID',
+  // Android-specific config
+  android: {
+    // clientId: 'YOUR_ANDROID_CLIENT_ID',
+    appId: '1:1053939269851:android:a63b7297efa78a11a54cfe',
+    apiKey: 'AIzaSyDRxgRDeRKueM2MmBNjUbKGh5mFYpVOJC4',
+    // databaseURL: 'YOUR_ANDROID_DATABASE_URL',
+    // messagingSenderId: 'YOUR_ANDROID_MESSAGING_SENDER_ID',
+    // measurementId: 'YOUR_ANDROID_MEASUREMENT_ID',
+  },
+  // iOS-specific config
+  ios: {
+    // clientId: 'YOUR_IOS_CLIENT_ID',
+    appId: '1:1053939269851:ios:2306ad8e01445633a54cfe',
+    apiKey: 'AIzaSyDIYWrlTYkKUlSweIFzYTYrpdUq17j9QFk',
+    // databaseURL: 'YOUR_IOS_DATABASE_URL',
+    messagingSenderId: '1053939269851',
+    // measurementId: 'YOUR_IOS_MEASUREMENT_ID',
+  },
+};
 
 
