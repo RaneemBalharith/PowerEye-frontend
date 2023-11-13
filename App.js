@@ -5,26 +5,40 @@ import messaging from '@react-native-firebase/messaging';
 
 export default function App() {
   const requestUserPermission = async () => {
-    const authStatus = await messaging().requestPermission();
-    const enabled =
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+    try {
+      const authStatus = await messaging().requestPermission();
+      const enabled =
+        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-    if (enabled) {
-      console.log('Authorization status:', authStatus);
+      if (enabled) {
+        console.log('Authorization status:', authStatus);
+        return true;
+      } else {
+        console.log('Failed to get permission');
+        return false;
+      }
+    } catch (error) {
+      console.error('Error requesting permission:', error);
+      return false;
     }
-  }
+  };
 
   useEffect(() => {
-    if (requestUserPermission()) {
-      messaging().getToken().then(token => {
-        console.log(token);
-        // here you have to call the token post api
-      });
+    const setupMessaging = async () => {
+      const permissionGranted = await requestUserPermission();
+
+      if (permissionGranted) {
+        try {
+          const token = await messaging().getToken();
+          console.log('Token:', token);
+          // Here you have to call the token post API
+        } catch (error) {
+          console.error('Error getting token:', error);
+        }
+      }
     }
-    else {
-      console.log('failed token status', authStatus)
-    }
+    setupMessaging();
 
     messaging()
       .getInitialNotification()
