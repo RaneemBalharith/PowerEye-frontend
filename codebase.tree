@@ -1,0 +1,133 @@
+PowerEye-frontend
+├── App.js
+├── app.json
+├── assets
+|  ├── APIs.pdf
+|  ├── FAQ.pdf
+|  ├── images/
+|  └── UserGuide.pdf
+├── node_modules/
+├── .expo/
+├── babel.config.js
+├── eas.json
+├── google-services.json
+├── GoogleService-Info.plist
+├── package-lock.json
+├── package.json
+├── README.md
+├── src
+|  ├── api
+|  |  └── apiManager.js
+|  ├── components
+|  |  ├── addApplianceButton.js
+|  |  ├── AddNewRoom.js
+|  |  ├── appliancePageAnalysis
+|  |  |  ├── Barchart.js
+|  |  |  ├── energyConsumption
+|  |  |  |  ├── month
+|  |  |  |  |  └── thirdTabView_ApplianceMonthEC.js
+|  |  |  |  ├── secondTabView_ApplianceEC.js
+|  |  |  |  ├── week
+|  |  |  |  |  └── thirdTabView_ApplianceWeekEC.js
+|  |  |  |  └── year
+|  |  |  |     └── thirdTabView_ApplianceYearEC.js
+|  |  |  └── firstTabViewAppliance.js
+|  |  ├── Card.js
+|  |  ├── deleteButton.js
+|  |  ├── devicesIcons.js
+|  |  ├── goalAchievement.js
+|  |  ├── GradientProgressBar.js
+|  |  ├── MyRoomComponent.js
+|  |  ├── navigation
+|  |  |  ├── app.navigator.js
+|  |  |  ├── authentication.navigator.js
+|  |  |  ├── home.navigation.js
+|  |  |  ├── index.js
+|  |  |  ├── notification.navigator.js
+|  |  |  ├── profile.navigation.js
+|  |  |  ├── room.navigator.js
+|  |  |  └── ten.navigator.js
+|  |  ├── removeGoal.js
+|  |  ├── roomPageAnalysis
+|  |  |  ├── Barchart.js
+|  |  |  ├── energyConsumption
+|  |  |  |  ├── month
+|  |  |  |  |  └── ThirdTabViewMonth.js
+|  |  |  |  ├── secondTabView.js
+|  |  |  |  ├── week
+|  |  |  |  |  └── ThirdTabViewWeek.js
+|  |  |  |  └── year
+|  |  |  |     └── ThirdTabViewYear.js
+|  |  |  └── firstTabViewRoom.js
+|  |  ├── saveGoalChanges.js
+|  |  ├── scrollableCard.js
+|  |  └── totalPageAnalysis
+|  |     ├── Barchart.js
+|  |     ├── energyConsumption
+|  |     |  ├── chart.js
+|  |     |  ├── month
+|  |     |  |  └── ThirdTabViewMonth.js
+|  |     |  ├── secondTabView.js
+|  |     |  ├── week
+|  |     |  |  └── ThirdTabViewWeek.js
+|  |     |  └── year
+|  |     |     └── ThirdTabViewYear.js
+|  |     └── firstTabView.js
+|  ├── screens
+|  |  ├── deviceCard
+|  |  |  └── deviceCard.screen.js
+|  |  ├── goalAchievement
+|  |  |  └── goalAchievement.screen.js
+|  |  ├── home
+|  |  |  ├── adddevice.js
+|  |  |  ├── addDeviceModal.js
+|  |  |  ├── deviceCard.js
+|  |  |  ├── deviceCardsSwiper.js
+|  |  |  ├── devicesIcons.js
+|  |  |  ├── goalAchievement.js
+|  |  |  ├── GradientProgressBar.js
+|  |  |  ├── header.js
+|  |  |  ├── home.screen.js
+|  |  |  ├── noPlugsFound.js
+|  |  |  ├── totalEnergyConsumption.js
+|  |  |  └── unableToRetrievePlugs.js
+|  |  ├── loading
+|  |  |  └── loading.screen.js
+|  |  ├── login
+|  |  |  └── login.screen.js
+|  |  ├── notification
+|  |  |  └── notification.screen.js
+|  |  ├── profile
+|  |  |  ├── deleteAccount.js
+|  |  |  ├── deletedAccountMessage.js
+|  |  |  ├── EditPersonalInfo.screen.js
+|  |  |  ├── faq.screen.js
+|  |  |  ├── helpCenter.screen.js
+|  |  |  ├── logoutModal.js
+|  |  |  ├── profile.screen.js
+|  |  |  └── userGuide.screen.js
+|  |  ├── room
+|  |  |  ├── deviceCard.js
+|  |  |  ├── deviceCardsSwiper.js
+|  |  |  ├── devicesIcons.js
+|  |  |  ├── room.component.js
+|  |  |  └── room.screen.js
+|  |  ├── signup
+|  |  |  └── signup.screen.js
+|  |  └── totalEnergyConsumption
+|  |     └── totalEnergyConsumption.screen.js
+|  ├── services
+|  |  ├── appliance.context.js
+|  |  ├── calculationFunctions.js
+|  |  ├── powerEye.context.js
+|  |  ├── theme
+|  |  |  ├── colors.js
+|  |  |  ├── fonts.js
+|  |  |  ├── index.js
+|  |  |  ├── sizes.js
+|  |  |  └── spacing.js
+|  |  └── theme.context.js
+|  └── utils
+|     └── colors.js
+├── .gitignore
+└── yarn.lock
