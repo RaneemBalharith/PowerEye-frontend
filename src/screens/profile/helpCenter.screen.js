@@ -20,14 +20,14 @@ export const HelpCenterScreen = ({ navigation }) => {
     if(Platform.OS == "ios"){
       navigation.navigate("userGuide")
     }else{
-      Linking.openURL('https://drive.google.com/file/d/1JHDjfokQsjU9hu4dKzni92s6PxXlAGaG/view?usp=drivesdk')
+      Linking.openURL('https://drive.google.com/file/d/1U5JAOpisOQWjrv9WQwgGNGAJYwuMETPR/view?usp=sharing')
     }
   }
   const goFAQ = () =>{
     if(Platform.OS == "ios"){
       navigation.navigate("FaqScreen")
     }else{
-      Linking.openURL('https://drive.google.com/file/d/10I0adfF818RKMYE6b2lMWgZceIKW27Gm/view?usp=drivesdk')
+      Linking.openURL('https://drive.google.com/file/d/1vjKjI4FnVKrC9ta6NvfSdps3n2aXtZgs/view?usp=drive_link')
     }
   }
   return (
