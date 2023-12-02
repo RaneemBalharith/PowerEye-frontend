@@ -1,55 +1,15 @@
-import React, { useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
+
+
+import React, { useState,useContext,useEffect } from 'react';
 import { Dimensions, StyleSheet, Text, View, ScrollView, useWindowDimensions, Alert } from 'react-native';
-import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import DeleteButton from '../../../deleteButton';
-import ApplianceEC_ThisYearBarchart from './ApplianceEC_ThisYearBarchart';
-import ApplianceEC_LastYearBarchart from './ApplianceEC_LastYearBarchart';
+import { TabView, TabBar } from 'react-native-tab-view';
 
-
-
-
-
-function handleDeleteRoom() {
-    // Perform API call or any other logic for deleting the room
-    // You can show a success message or navigate to another screen after deletion
-    Alert.alert('Appliance deleted!');
-}
-
-const LastYear = () => (
-    <View style={{ flex: 1 }} >
-        <ScrollView>
-            <ApplianceEC_LastYearBarchart />
-            <View style={{ marginTop: 30, marginBottom: 60, marginLeft: 100, marginRight: 100 }}>
-
-                <DeleteButton text="Delete Appliance" roomName="Example Room" onDelete={handleDeleteRoom} />
-            </View>
-        </ScrollView>
-
-    </View>
-
-);
-
-const ThisYear = () => (
-    <View style={{ flex: 1 }} >
-        <ScrollView>
-        <ApplianceEC_ThisYearBarchart />
-        <View style={{ marginTop: 30, marginBottom: 60, marginLeft: 100, marginRight: 100 }}>
-
-                <DeleteButton text="Delete Appliance" roomName="Example Room" onDelete={handleDeleteRoom} />
-            </View>
-            </ScrollView>
-    </View>
-);
-
-const renderScene = SceneMap({
-    firstTab: LastYear,
-    secondTab: ThisYear,
-
-});
-
+import { PowerEyeContext } from '../../../../services/powerEye.context';
+import { Barchart } from '../../Barchart';
+import { ActivityIndicator } from 'react-native-paper';
 const renderTabBar = props => (
     <TabBar
+    
         scrollEnabled
         {...props}
         activeColor={'#00707C'}
@@ -61,39 +21,47 @@ const renderTabBar = props => (
 
     />
 );
-
-
-
-export default function ThirdTabView_ApplianceYearEC({ navigation }) {
+export default function ThirdTabView_ApplianceYearEC({type , yearlyRoute , yearlyEnergy}) {
     const layout = useWindowDimensions();
-
+    const {token,applianceId} = useContext(PowerEyeContext)
     const [index, setIndex] = React.useState(0);
-    const [routes] = React.useState([
-        { key: 'firstTab', title: 'Last Year' },
-        { key: 'secondTab', title: 'This Year' },
-    ]);
+    let routes = yearlyRoute.length ? yearlyRoute : []
+    const [data,setData] = useState([]);
+
+
+    
+      const renderScene = ({ route }) => {
+        return (
+     <ScrollView>
+        <Barchart type={type} data={yearlyEnergy[route.Key]}/>
+     </ScrollView>
+        );
+      };
+
 
     return (
-        <View style={styles.container}>
+      <View style={styles.container}>
+      {
+      
+      yearlyEnergy.length == 0?(
+        <View style={styles.tabContainer}>
+            <ActivityIndicator size={'small'} color='#00707C' />
+        </View>
+        
+        
+
+      ):( 
             <View style={styles.tabContainer}>
                 <TabView
                     navigationState={{ index, routes }}
-                    renderScene={({ route }) => {
-                        switch (route.key) {
-                            case 'firstTab':
-                                return <LastYear />;
-                            case 'secondTab':
-                                return <ThisYear />;
-                            default:
-                                return null;
-                        }
-                    }}
+                    renderScene={renderScene}
                     renderTabBar={renderTabBar}
                     onIndexChange={setIndex}
                     initialLayout={{ width: layout.width }}
 
                 />
             </View>
+        )}
         </View>
     );
 }

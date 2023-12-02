@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1053939269851",
+    "project_id": "powereye1-e599e",
+    "storage_bucket": "powereye1-e599e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1053939269851:android:68bff8ae2033ca47a54cfe",
+        "android_client_info": {
+          "package_name": "com.powereye"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRxgRDeRKueM2MmBNjUbKGh5mFYpVOJC4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1053939269851:android:a63b7297efa78a11a54cfe",
+        "android_client_info": {
+          "package_name": "com.reem_hej.PowerEye"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRxgRDeRKueM2MmBNjUbKGh5mFYpVOJC4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

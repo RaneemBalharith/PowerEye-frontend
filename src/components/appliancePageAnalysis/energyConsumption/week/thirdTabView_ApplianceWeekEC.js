@@ -1,85 +1,15 @@
-import React, { useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
+
+
+import React, { useState,useContext,useEffect } from 'react';
 import { Dimensions, StyleSheet, Text, View, ScrollView, useWindowDimensions, Alert } from 'react-native';
-import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import DeleteButton from '../../../deleteButton';
-import ApplianceEC_3WeekBarchart from './ApplianceEC_3WeekBarchart';
-import ApplianceEC_2WeekBarchart from './ApplianceEC_2WeekBarchart';
-import ApplianceEC_ThisWeekBarchart from './ApplianceEC_ThisWeekBarchart';
-import ApplianceEC_LastWeekBarchart from './ApplianceEC_LastWeekBarchart';
+import { TabView, TabBar } from 'react-native-tab-view';
 
-
-
-
-
-function handleDeleteRoom() {
-    // Perform API call or any other logic for deleting the room
-    // You can show a success message or navigate to another screen after deletion
-    Alert.alert('Appliance deleted!');
-}
-
-const ThreeWeeksAgo = () => (
-    <View style={{ flex: 1 }} >
-        <ScrollView>
-            <ApplianceEC_3WeekBarchart />
-
-            <View style={{ marginTop: 20, marginBottom: 60, marginLeft: 100, marginRight: 100 }}>
-
-                <DeleteButton text="Delete Appliance" roomName="Example Room" onDelete={handleDeleteRoom} />
-            </View>
-        </ScrollView>
-    </View>
-);
-
-const TwoWeeksAgo = () => (
-
-    <View style={{ flex: 1 }} >
-        <ScrollView>
-            <ApplianceEC_2WeekBarchart />
-            <View style={{ marginTop: 20, marginBottom: 60, marginLeft: 100, marginRight: 100 }}>
-
-                <DeleteButton text="Delete Appliance" roomName="Example Room" onDelete={handleDeleteRoom} />
-            </View>
-        </ScrollView>
-    </View>
-);
-
-const LastWeek = () => (
-    <View style={{ flex: 1 }} >
-        <ScrollView>
-            <ApplianceEC_ThisWeekBarchart />
-            <View style={{ marginTop: 20, marginBottom: 60, marginLeft: 100, marginRight: 100 }}>
-
-                <DeleteButton text="Delete Appliance" roomName="Example Room" onDelete={handleDeleteRoom} />
-            </View>
-        </ScrollView>
-
-
-    </View>
-
-);
-
-const Thisweek = () => (
-    <View style={{ flex: 1 }} >
-        <ScrollView>
-            <ApplianceEC_LastWeekBarchart />
-            <View style={{ marginTop: 20, marginBottom: 60, marginLeft: 100, marginRight: 100 }}>
-
-                <DeleteButton text="Delete Appliance" roomName="Example Room" onDelete={handleDeleteRoom} />
-            </View>
-        </ScrollView>
-    </View>
-);
-
-const renderScene = SceneMap({
-    firstTab: ThreeWeeksAgo,
-    secondTab: TwoWeeksAgo,
-    thirdTab: LastWeek,
-    fourthTab: Thisweek,
-});
-
+import { PowerEyeContext } from '../../../../services/powerEye.context';
+import { ActivityIndicator } from 'react-native-paper';
+import { Barchart } from '../../Barchart';
 const renderTabBar = props => (
     <TabBar
+    
         scrollEnabled
         {...props}
         activeColor={'#00707C'}
@@ -91,45 +21,44 @@ const renderTabBar = props => (
 
     />
 );
-
-
-
-export default function ThirdTabView_ApplianceWeekEC({ navigation }) {
+export default function ThirdTabView_ApplianceWeekEC({type,weeklyEnergy , weeklyRoute}) {
     const layout = useWindowDimensions();
-
+    const {token,applianceId} = useContext(PowerEyeContext)
     const [index, setIndex] = React.useState(0);
-    const [routes] = React.useState([
-        { key: 'firstTab', title: 'Three Weeks Ago' },
-        { key: 'secondTab', title: 'Two Weeks Ago' },
-        { key: 'thirdTab', title: 'Last Week' },
-        { key: 'fourthTab', title: 'This Week' },
-    ]);
+    const [data,setData] = useState([]);
+    let routes = weeklyRoute.length ? weeklyRoute : []
+      const renderScene = ({ route }) => {
+
+        return (
+     <ScrollView>
+        <Barchart type={type} data={weeklyEnergy[route.Key]}/>
+     </ScrollView>
+        );
+      };
 
     return (
-        <View style={styles.container}>
+      <View style={styles.container}>
+      {
+      
+      weeklyEnergy.length == 0?(
+        <View style={styles.tabContainer}>
+            <ActivityIndicator size={'small'} color='#00707C' />
+        </View>
+        
+        
+
+      ):( 
             <View style={styles.tabContainer}>
                 <TabView
                     navigationState={{ index, routes }}
-                    renderScene={({ route }) => {
-                        switch (route.key) {
-                            case 'firstTab':
-                                return <ThreeWeeksAgo />;
-                            case 'secondTab':
-                                return <TwoWeeksAgo />;
-                            case 'thirdTab':
-                                return <LastWeek />;
-                            case 'fourthTab':
-                                return <Thisweek />;
-                            default:
-                                return null;
-                        }
-                    }}
+                    renderScene={renderScene}
                     renderTabBar={renderTabBar}
                     onIndexChange={setIndex}
                     initialLayout={{ width: layout.width }}
 
                 />
             </View>
+        )}
         </View>
     );
 }

@@ -1,10 +1,10 @@
 {
   "expo": {
     "name": "PowerEye",
-    "slug": "PowerEye",
+    "slug": "powereye",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -15,16 +15,38 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.rem.PowerEye",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
+      "permissions": ["INTERNET"],
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.reem_hej.PowerEye"
     },
+    "plugins": [
+      "@react-native-firebase/app",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ]
+    ],
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "1bef8642-13aa-45d0-a14d-18321758394a"
+      }
+    },
+    "owner": "rem_h"
   }
 }

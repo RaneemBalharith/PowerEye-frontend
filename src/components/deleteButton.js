@@ -1,14 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import { StyleSheet, TouchableOpacity, Text, View, Modal } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons'; 
-
-export default function DeleteButton({ text, roomName, onDelete }) {
+import { deleteApplianceRequest, getAllApplianceRequest } from '../api/apiManager';
+import { PowerEyeContext } from '../services/powerEye.context';
+export default function DeleteButton({ text, roomName }) {
   const [modalVisible, setModalVisible] = useState(false);
+  const {token, applianceId,setRefresh,goBackNavigation} =  useContext(PowerEyeContext)
 
-  const handleDelete = () => {
-    // Call API for deleting the room
-    onDelete();
+  const handleDelete =async () => {
+    if(text == "Delete Appliance"){
+      deleteApplianceRequest(token,applianceId).then((res)=>{
+        setRefresh(res)
+      })
+      goBackNavigation.goBack()
+    }
+    if(text == "Delete Room"){
+
+    }
     setModalVisible(false);
+    setRefresh(true)
   };
 
   return (
@@ -23,10 +33,21 @@ export default function DeleteButton({ text, roomName, onDelete }) {
       <Modal visible={modalVisible} animationType="slide" transparent>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
+            {text ==  "Delete Room" ?
+           ( <>
             <Text style={styles.modalTitle}>Are you sure you want to permanently delete {roomName}?</Text>
             <Text style={styles.modalMessage}>
               Once you delete this room, it can't be restored. You will lose access to past data and analysis.
             </Text>
+            </>):(
+              <>
+              <Text style={styles.modalTitle}>Are you sure you want to permanently delete this appliance?</Text>
+              <Text style={styles.modalMessage}>
+                Once you delete this appliance, it can't be restored. You will lose access to past data and analysis.
+              </Text>
+              </>
+            )
+          }
             <View style={styles.modalButtonContainer}>
               <TouchableOpacity style={styles.modalButton} onPress={handleDelete}>
                 <Text style={styles.modalButtonText}>Delete</Text>

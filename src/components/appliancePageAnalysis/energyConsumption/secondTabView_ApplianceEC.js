@@ -5,35 +5,6 @@ import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import ThirdTabView_ApplianceWeekEC from './week/thirdTabView_ApplianceWeekEC';
 import ThirdTabView_ApplianceMonthEC from './month/thirdTabView_ApplianceMonthEC';
 import ThirdTabView_ApplianceYearEC from './year/thirdTabView_ApplianceYearEC';
-
-
-const Week = () => (
-   
-    <View style={{ flex: 1 }} >
-        <ThirdTabView_ApplianceWeekEC />
-    </View>
-   
-);
-
-const Month = () => (
-    <View style={{ flex: 1 }} >
-        <ThirdTabView_ApplianceMonthEC />
-    </View>
-
-);
-
-const Year = () => (
-    <View style={{ flex: 1 }} >
-        <ThirdTabView_ApplianceYearEC/>
-    </View>
-);
-
-const renderScene = SceneMap({
-    week: Week,
-    month: Month,
-    year: Year,
-});
-
 const renderTabBar = props => (
     <TabBar
     
@@ -50,14 +21,8 @@ const renderTabBar = props => (
 
     />
 );
-
-
-
-
-
-export default function SecondTabView_ApplianceEC({ navigation }) {
+export default function SecondTabView_ApplianceEC({type, monthlyEnergy , monthlyRoute, yearlyRoute , yearlyEnergy,weeklyEnergy , weeklyRoute }) {
     const layout = useWindowDimensions();
-
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
         { key: 'week', title: 'Week' },
@@ -73,13 +38,11 @@ export default function SecondTabView_ApplianceEC({ navigation }) {
                     renderScene={({ route }) => {
                         switch (route.key) {
                             case 'week':
-                                return <Week />;
+                                return <ThirdTabView_ApplianceWeekEC type={type} weeklyEnergy={weeklyEnergy} weeklyRoute={weeklyRoute}/>;
                             case 'month':
-                                return <Month />;
+                                 return <ThirdTabView_ApplianceMonthEC  type={type} monthlyEnergy={monthlyEnergy} monthlyRoute={monthlyRoute} />
                             case 'year':
-                                return <Year />;
-                            default:
-                                return null;
+                                return <ThirdTabView_ApplianceYearEC  type={type} yearlyRoute={yearlyRoute} yearlyEnergy={yearlyEnergy}/>;
                         }
                     }}
                     renderTabBar={renderTabBar}

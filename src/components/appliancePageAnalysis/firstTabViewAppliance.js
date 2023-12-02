@@ -1,44 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState,useContext } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Dimensions, StyleSheet, Text, View, ScrollView, useWindowDimensions } from 'react-native';
+import { Dimensions, StyleSheet,Modal,TouchableOpacity, Text, View, ScrollView, useWindowDimensions, Button } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import SecondTabView_ApplianceEC from './energyConsumption/secondTabView_ApplianceEC';
-import SecondTabView_ApplianceCost from './cost/secondTabView_ApplianceCost';
-import SecondTabView_ApplianceCO2 from './co2/secondTabView_ApplianceCO2';
+import { getApplianceEnergyRequest,deleteApplianceRequest } from '../../api/apiManager';
+import { PowerEyeContext } from '../../services/powerEye.context';
 
-const Energy = () => (
-    <View style={{ flex: 1 }} >
-      
-       <SecondTabView_ApplianceEC />
-    
-    </View>
-);
-
-const Cost = () => (
-    <View style={{ flex: 1 }} >
-     <SecondTabView_ApplianceCost />
-     
-    </View>
-
-);
-
-const CO2 = () => (
-    <View style={{ flex: 1 }} >
-       <SecondTabView_ApplianceCO2 />
- 
-        
-    </View>
-);
-
-const renderScene = SceneMap({
-    energy: Energy,
-    cost: Cost,
-    co2: CO2,
-});
 
 const renderTabBar = props => (
     <TabBar
         {...props}
+        
         activeColor={'#00707C'}
         inactiveColor={'#8D9BA4'}
         indicatorStyle={{ backgroundColor: '#00707C' }}
@@ -51,8 +23,64 @@ const renderTabBar = props => (
 
 
 
-export default function FirstTabViewAppliance({ navigation }) {
+export default function FirstTabViewAppliance({applianceId,navigation}) {
+  const [monthlyEnergy , setMonthlyEnergy ] = useState([])
+  const [monthlyRoute , setMonthlyRoute ] = useState([])
+  const [yearlyEnergy , setYearlyEnergy ] = useState([])
+  const [yearlyRoute , setYearlyRoute ] = useState([])
+  const [weeklyEnergy , setWeeklyEnergy ] = useState([])
+  const [weeklyRoute , setWeeklyRoute ] = useState([])
+    const handleDelete = () => {
+          deleteApplianceRequest(token,applianceId).then((res)=>{
+            setRefresh(res)
+          })
+          navigation.goBack()
+        setModalVisible(false);
+        setRefresh(true)
+      };
     const layout = useWindowDimensions();
+    const {token,setRefresh,modalVisible, setModalVisible}  = useContext(PowerEyeContext)
+    const DeleteModal =({modalVisible, setModalVisible})=>{
+        return(
+            <Modal visible={modalVisible} animationType="slide" transparent>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                  <Text style={styles.modalTitle}>Are you sure you want to permanently delete this appliance?</Text>
+                  <Text style={styles.modalMessage}>
+                    Once you delete this appliance, it can't be restored. You will lose access to past data and analysis.
+                  </Text>
+                <View style={styles.modalButtonContainer}>
+                  <TouchableOpacity style={{
+        backgroundColor: '#B43232',
+        padding:10,
+        borderRadius:10,
+        height:40,
+        width:100,
+        marginHorizontal: 8,
+      }} onPress={handleDelete}>
+                    <Text style={styles.modalButtonText}>Delete</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{        backgroundColor:'rgba(0,0,0,0.5)',
+                    padding:10,
+                    borderRadius:10,
+                    height:40,
+                    width:100,
+                    marginHorizontal: 8,}}
+                    onPress={() => setModalVisible(false)}
+                  >
+                    <Text style={styles.modalButtonText}>Cancel</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
+        )
+    }
+
+
+
+
 
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
@@ -60,7 +88,24 @@ export default function FirstTabViewAppliance({ navigation }) {
         { key: 'cost', title: 'Cost' },
         { key: 'co2', title: 'CO2' },
     ]);
-
+    useEffect(()=>{
+      if(monthlyEnergy.length == 0) {
+      getApplianceEnergyRequest(token ,applianceId ,'monthly' ).then((res)=>{
+        
+        setMonthlyEnergy(res['monthly_energy_data'])
+        setMonthlyRoute(res['monthly_energy_data'].map((p) => { return { Key: res['monthly_energy_data'].indexOf(p), title: p.title } }))
+      })}
+      if(yearlyEnergy.length == 0) {
+        getApplianceEnergyRequest(token ,applianceId ,'yearly' ).then((res)=>{
+          setYearlyEnergy(res['monthly_energy_data'])
+          setYearlyRoute(res['monthly_energy_data'].map((p) => { return { Key: res['monthly_energy_data'].indexOf(p), title: p.title } }))
+        })}
+        if(weeklyEnergy.length == 0) {
+          getApplianceEnergyRequest(token ,applianceId ,'weekly' ).then((res)=>{
+            setWeeklyEnergy(res['weekly_energy_data'])
+            setWeeklyRoute(res['weekly_energy_data'].map((p) => { return { Key: res['weekly_energy_data'].indexOf(p), title: p.title } }))
+          })}
+    },[])
     return (
         <View style={styles.container}>
             <View style={styles.tabContainer}>
@@ -69,13 +114,12 @@ export default function FirstTabViewAppliance({ navigation }) {
                     renderScene={({ route }) => {
                         switch (route.key) {
                             case 'energy':
-                                return <Energy />;
+                                return <SecondTabView_ApplianceEC weeklyEnergy={weeklyEnergy} weeklyRoute={weeklyRoute} monthlyRoute={monthlyRoute} monthlyEnergy={monthlyEnergy} yearlyEnergy={yearlyEnergy} yearlyRoute={yearlyRoute} type={'energy'}/>;
                             case 'cost':
-                                return <Cost />;
+                                return <SecondTabView_ApplianceEC  weeklyEnergy={weeklyEnergy} weeklyRoute={weeklyRoute} monthlyRoute={monthlyRoute} monthlyEnergy={monthlyEnergy} yearlyEnergy={yearlyEnergy} yearlyRoute={yearlyRoute} type={'cost'}/>;
                             case 'co2':
-                                return <CO2 />;
-                            default:
-                                return null;
+                                return <SecondTabView_ApplianceEC  weeklyEnergy={weeklyEnergy} weeklyRoute={weeklyRoute} monthlyRoute={monthlyRoute} monthlyEnergy={monthlyEnergy} yearlyEnergy={yearlyEnergy} yearlyRoute={yearlyRoute} type={'co2'}/>;
+
                         }
                     }}
                     renderTabBar={renderTabBar}
@@ -84,6 +128,8 @@ export default function FirstTabViewAppliance({ navigation }) {
                     
                 />
             </View>
+            <DeleteModal modalVisible={modalVisible} setModalVisible={setModalVisible}  />
+           
         </View>
     );
 }
@@ -98,4 +144,69 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#F0F8F9',
     },
+    button: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        borderRadius: 8,
+        paddingVertical: 10,
+        paddingHorizontal: 16,
+        backgroundColor: '#B43232',
+      },
+      buttonText: {
+        color: 'white',
+        fontWeight: 'bold',
+        textTransform: 'uppercase',
+        fontSize: 14,
+        textAlign: 'center',
+        justifyContent: 'center',
+      },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      },
+      modalContent: {
+        backgroundColor: '#fff',
+        padding: 30,
+        borderRadius: 8,
+        margin: 15,
+      },
+      modalTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#B43232',
+        marginBottom: 16,
+        textAlign: 'left',
+        
+      },
+      modalMessage: {
+        fontSize: 16,
+        color: '#00707C',
+        marginBottom: 16,
+        textAlign: 'left',
+        padding: 5,
+      },
+      modalButtonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+      },
+      modalButton: {
+        flex: 1,
+        borderRadius: 8,
+        paddingVertical: 10,
+        paddingHorizontal: 16,
+        backgroundColor: '#B43232',
+        marginHorizontal: 8,
+      },
+      cancelButton: {
+        backgroundColor: '#8D9BA4',
+      },
+      modalButtonText: {
+        color: 'white',
+        fontWeight: 'bold',
+        textTransform: 'uppercase',
+        fontSize: 14,
+        textAlign: 'center',
+      },
 });

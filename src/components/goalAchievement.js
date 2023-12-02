@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, Image, StyleSheet, Dimensions } from "react-native";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import GradientProgressBar from './GradientProgressBar';
+import { PowerEyeContext } from "../services/powerEye.context";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export const GoalAchievement = ({ progress }) => {
+export const GoalAchievement = () => {
+  const {energyGoal,progress,currentMonthEnergy,convertEnergyToCost,setRefresh, setEnergyGoal} = useContext(PowerEyeContext)
   return (
     <View style={styles.GoalAchievementCard}>
       <View style={styles.CardTitleWrapper}>
@@ -20,16 +22,16 @@ export const GoalAchievement = ({ progress }) => {
       </View>
       <View style={styles.progressBarWarapper}>
         <Text style={styles.progress}>
-            {progress} SAR
+            {convertEnergyToCost(currentMonthEnergy)} SAR
         </Text>
         <GradientProgressBar
-          progress={progress}
-          width={windowWidth*0.65}
+          progress={(currentMonthEnergy/energyGoal)*100}
+          width={windowWidth*0.60}
           height={7}
           borderRadius={5}
         />
         <Text style={styles.progress}>
-        {100-progress} SAR
+        {convertEnergyToCost(energyGoal != -1 && energyGoal)} SAR
         </Text>
       </View>
     </View>
