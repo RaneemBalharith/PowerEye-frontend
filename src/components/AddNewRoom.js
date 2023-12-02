@@ -39,7 +39,7 @@ const AddNewRoom = () => {
   const createRows = (devices, itemsPerRow) => {
     const rows = [];
     let row = [];
-    appliances.forEach((device, index) => {
+    appliances?.forEach((device, index) => {
 
       const isSelected = isDeviceSelected(device);
       row.push(
@@ -70,7 +70,7 @@ const AddNewRoom = () => {
         </TouchableOpacity>
       );
 
-      if ((index + 1) % itemsPerRow === 0 || index === devices.length - 1) {
+      if ((index + 1) % itemsPerRow === 0 || index === devices?.length - 1) {
         rows.push(
           <View key={index} style={styles.deviceRow}>
             {row}
