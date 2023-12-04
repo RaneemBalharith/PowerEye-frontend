@@ -248,60 +248,61 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   // Modal Styles
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 10,
-    padding: 20,
-    width: 300,
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    textAlign: 'center',
-  },
-  modalInput: {
-    height: 40,
-    borderColor: '#CCCCCC',
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 10,
-  },
-  modalButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
-  modalButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 5,
-    marginLeft: 10,
-  },
-  cancelButton: {
-    backgroundColor: '#CCCCCC',
-  },
-  saveButton: {
-    backgroundColor: '#00707C',
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-  inputError: {
-    borderColor: 'red',
-  },
-  errorText: {
-    color: 'red',
-    marginBottom: 10,
-  },
+     // Modal Styles
+     modalContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+      backgroundColor: '#FFFFFF',
+      borderRadius: 10,
+      padding: 20,
+      width: 300,
+    },
+    modalTitle: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      marginBottom: 10,
+      textAlign: 'center',
+    },
+    modalInput: {
+      height: 40,
+      borderColor: '#CCCCCC',
+      borderWidth: 1,
+      borderRadius: 5,
+      paddingHorizontal: 10,
+      marginBottom: 10,
+    },
+    modalButtonContainer: {
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+    },
+    modalButton: {
+      paddingVertical: 8,
+      paddingHorizontal: 12,
+      borderRadius: 5,
+      marginLeft: 10,
+    },
+    cancelButton: {
+      backgroundColor: '#CCCCCC',
+    },
+    saveButton: {
+      backgroundColor: '#00707C',
+    },
+    buttonText: {
+      color: '#FFFFFF',
+      fontSize: 14,
+      fontWeight: 'bold',
+    },
+    inputError: {
+      borderColor: 'red',
+    },
+    errorText: {
+      color: 'red',
+      marginBottom: 10,
+    },
 
 //Modal 2
     

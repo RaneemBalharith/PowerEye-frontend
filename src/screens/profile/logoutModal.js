@@ -31,16 +31,17 @@ export const LogoutModal = ({navigation,onModalShow , setOnModalShow}) => {
               Are you sure you want to logout ?
             </Text>
             <View style={styles(theme).buttonsWrapper}>
+              <Pressable
+              style={styles(theme).deleteButton}
+              onPress={() => goLoginScreen()}>
+              <Text style={styles(theme).textStyle}>Yes</Text>
+            </Pressable>
             <Pressable
               style={styles(theme).button}
               onPress={() => setOnModalShow(!onModalShow)}>
               <Text style={styles(theme).textStyle}>Cancel</Text>
             </Pressable>
-            <Pressable
-              style={styles(theme).deleteButton}
-              onPress={() => goLoginScreen()}>
-              <Text style={styles(theme).textStyle}>Yes</Text>
-            </Pressable>
+          
             </View>
           </View>
         </View>

@@ -6,9 +6,13 @@ import {
   StyleSheet,
   Text,
   Image,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { PowerEyeContext } from "../../services/powerEye.context";
-import {authRequest} from '../../api/apiManager'
+import {authRequest} from '../../api/apiManager';
+import { ScrollView } from "react-native-gesture-handler";
+
 export const LoginScreen = ({ navigation }) => {
   const { setLoggedIn, email, setEmail, password, setPassword,setToken } =
     useContext(PowerEyeContext);
@@ -29,9 +33,22 @@ export const LoginScreen = ({ navigation }) => {
         }));
       } else {
       authRequest(email,password).then(token=> {
+    
          if(token){
           setToken(token['token'])
           console.log(token['token'])
+          
+         }
+         
+         
+         if(token['error']){
+          setLoginStatus(token['error']);
+          setInputErrors({
+            email: !email,
+            password: !password,
+          })
+          
+
          }
         })
         setLoginStatus("");
@@ -61,7 +78,13 @@ export const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+    behavior={Platform.OS === "ios" ? "padding" : "height"}
+    style={styles.container}
+  >
+    <ScrollView contentContainerStyle={styles.scrollViewContent}>
+      <View style={styles.innerContainer}>
+
       <Image
         source={require("../../../assets/images/Loginpic.gif")}
         style={styles.LogInPic}
@@ -118,8 +141,13 @@ export const LoginScreen = ({ navigation }) => {
         </Text>
       </View>
     </View>
+    
+    </ScrollView>
+    </KeyboardAvoidingView>
+
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -127,6 +155,15 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     backgroundColor: "white",
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    justifyContent: "center",
+  },
+  innerContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   inputContainer: {
     marginTop: 20,
@@ -145,58 +182,52 @@ const styles = StyleSheet.create({
     borderColor: "red",
   },
   signupText: {
-    margin: 20,
+    marginBottom: 10,
     textAlign: "center",
-    fontFamily: "Times New Roman",
-    fontSize: 21.5,
-    color: "black",
   },
   signupLink: {
     color: "#00707C",
-    textDecorationLine: "none",
-  },
-  button: {
-    width: 350,
-    height: 55,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 18,
     fontWeight: "bold",
   },
-  imageContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+  button: {
     alignItems: "center",
-    marginBottom: 10,
+    backgroundColor: "#DDDDDD",
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 20,
   },
-  LogInPic: {
-    marginBottom: 40,
-    marginTop: 80,
-    width: 200,
-    height: 200,
-    resizeMode: "cover",
-  },
-  MerossLogo: {
-    marginLeft: 10,
-    width: 160,
-    height: 50,
-    resizeMode: "contain",
-  },
-  PowerEyeLogo: {
-    width: 200,
-    height: 75,
-    resizeMode: "contain",
+  buttonText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#000000",
   },
   loginStatusText: {
     color: "red",
-    textAlign: "center",
-    fontFamily: "Times New Roman",
-    fontSize: 20,
     marginBottom: 10,
-    marginTop: 10,
+  },
+  imageContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  PowerEyeLogo: {
+    flex: 1, // Take up available space
+    height: 50,
+    marginRight: 10,
+    resizeMode: "contain", // Adjust image content to fit
+  },
+  MerossLogo: {
+    flex: 1, // Take up available space
+    height: 50,
+    resizeMode: "contain", // Adjust image content to fit
+  },
+  LogInPic: {
+    width: "60%", // Take up the full width
+    height: 150,
+    borderRadius: 10,
+    resizeMode: "cover", // Adjust image content to cover
   },
 });
+
+export default LoginScreen;

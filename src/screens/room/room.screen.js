@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { View, TouchableOpacity, Text,FlatList, StyleSheet, ScrollView, Dimensions, Modal, TextInput } from 'react-native';
+import { View, TouchableOpacity, Text, FlatList, StyleSheet, ScrollView, Dimensions, Modal, TextInput } from 'react-native';
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 import AddNewRoom from '../../components/AddNewRoom';
@@ -8,12 +8,12 @@ import { PowerEyeContext } from '../../services/powerEye.context';
 
 import { addNewRoomRequest } from '../../api/apiManager';
 
-export const RoomScreen  = ({navigation}) => {
+export const RoomScreen = ({ navigation }) => {
   const [components, setComponents] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showNameModal, setShowNameModal] = useState(false);
   const [roomName, setRoomName] = useState('');
-  const {token,appliance_ids,setAppliance_ids,rooms,setRefresh} = useContext(PowerEyeContext)
+  const { token, appliance_ids, setAppliance_ids, rooms, setRefresh } = useContext(PowerEyeContext)
 
   const handleAddComponent = () => {
     setShowAddModal(true);
@@ -31,8 +31,8 @@ export const RoomScreen  = ({navigation}) => {
 
   const handleNameNext = () => {
     setShowNameModal(false);
-  console.log(appliance_ids)
-    addNewRoomRequest(token,appliance_ids,roomName ).then((res)=>{
+    console.log(appliance_ids)
+    addNewRoomRequest(token, appliance_ids, roomName).then((res) => {
       setAppliance_ids([])
     })
     setRefresh('redresh the rooms')
@@ -43,28 +43,34 @@ export const RoomScreen  = ({navigation}) => {
       <View style={styles.header}>
         <Text style={styles.headerText}>My Rooms</Text>
       </View>
+      <View>
+        <TouchableOpacity style={styles.addButton} onPress={handleAddComponent}>
+          <MaterialCommunityIcons name="plus" size={20} fontWeight="bold" color="black" />
+          <Text style={styles.addButtonText}>Add</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={{ marginTop: 80 }}>
+        <FlatList
+          data={rooms ? rooms : []}
+          renderItem={({ item }) => {
+            return (
 
-      <TouchableOpacity style={styles.addButton} onPress={handleAddComponent}>
-        <MaterialCommunityIcons name="plus" size={20} color="rgba(0, 0, 0, 0.5)" />
-        <Text style={styles.addButtonText}>Add</Text>
-      </TouchableOpacity>
-      <FlatList
-      data={rooms?rooms:[]}
-      renderItem={({item})=>{
-        return(
-        <MyRoomComponent
-            number={components.length + 1}
-            key={components.length}
-            roomName={item.name}
-            roomid={item.id}
-            room={item}
-            navigation={navigation}
-            
-          />)
-      }}
-      keyExtractor={(item) => item.id}
-    />
+              <MyRoomComponent
+                number={components.length + 1}
+                key={components.length}
+                roomName={item.name}
+                roomid={item.id}
+                room={item}
+                navigation={navigation}
 
+
+              />
+            )
+          }}
+          keyExtractor={(item) => item.id}
+
+        />
+      </View>
 
 
       <Modal visible={showAddModal} animationType="slide" transparent={true}>
@@ -72,7 +78,7 @@ export const RoomScreen  = ({navigation}) => {
           <View style={styles.modalContent}>
             <AddNewRoom onAdd={handleAddNewRoom} onCancel={handleCloseModal} />
             <View style={styles.modalButtonsContainer}>
-            <TouchableOpacity style={[styles.modalButton, styles.nextButton]} onPress={handleAddNewRoom}>
+              <TouchableOpacity style={[styles.modalButton, styles.nextButton]} onPress={handleAddNewRoom}>
                 <Text style={styles.nextButtonText}>Next</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.modalButton} onPress={handleCloseModal}>
@@ -95,77 +101,79 @@ export const RoomScreen  = ({navigation}) => {
               onChangeText={setRoomName}
             />
             <View style={styles.modalButtonsContainer}>
-            <TouchableOpacity style={[styles.modalButton, styles.nextButton]} onPress={handleNameNext}>
+              <TouchableOpacity style={[styles.modalButton, styles.nextButton]} onPress={handleNameNext}>
                 <Text style={styles.nextButtonText}>Create</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.modalButton} onPress={handleCloseModal}>
                 <Text style={styles.modalButtonText}>Cancel</Text>
               </TouchableOpacity>
-             
             </View>
           </View>
         </View>
       </Modal>
 
-      
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+
+
     justifyContent: 'center',
-    alignItems: 'center',
+
   },
   header: {
     width: '100%',
-    height: 120,
+    height: 100,
     marginBottom: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
     borderBottomWidth: 2,
     borderBottomColor: 'lightgray',
   },
   headerText: {
-    marginTop: 20,
+    marginTop: 50,
+    marginLeft: 40,
     marginBottom: 10,
-    marginRight: 270,
-    fontSize: 24,
+    color: "rgba(0,112,124,0.8)",
+    fontSize: 22,
     fontWeight: 'bold',
-    color: '#00707C',
   },
+
   addButton: {
-    position: 'relative',
-    left: 150,
-    marginTop: 20,
-    marginBottom: 20,
-    marginLeft: 20,
-    padding: 10,
-    backgroundColor: 'lightgray',
-    borderRadius: 5,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#00707C',
+    position: 'absolute',
+    top: Platform.OS === 'ios' ? Dimensions.get('window').height * 0.02 : Dimensions.get('window').height * 0.02,
+    right: Dimensions.get('window').width * 0.05,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,112,124,0.8)",
+    borderRadius: 15,
+    padding: 5,
+    width: 100,
+    marginTop: 7,
+
   },
   addButtonText: {
+    fontWeight: "bold",
+    fontSize: 12,
     color: 'black',
-    marginLeft: 5,
+    justifyContent: 'center',
   },
+
+
   scrollContainer: {
     alignItems: 'center',
     marginTop: 0,
     width: Dimensions.get('window').width * 0.99,
   },
   modalContainer: {
-   flex: 1,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
-    width: 360,
+    width: 340,
     height: 540,
     backgroundColor: 'white',
     borderRadius: 10,
@@ -198,7 +206,6 @@ const styles = StyleSheet.create({
   modalButtonsContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    marginTop: 20,
   },
   modalButton: {
     marginLeft: 10,

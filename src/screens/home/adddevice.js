@@ -53,7 +53,10 @@ const styles = StyleSheet.create((theme) => ({
     height: theme.sizes[4],
     width: theme.sizes[8],
     backgroundColor: theme.colors.greenTransparent,
-    borderRadius: theme.sizes[1],
+    borderRadius: 15,
+
+
+    
   },
   Title: {
     color: theme.colors.text,

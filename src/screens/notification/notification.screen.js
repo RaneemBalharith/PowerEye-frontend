@@ -5,6 +5,7 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
+  Dimensions
 } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { ThemeContext } from "../../services/theme.context";
@@ -138,6 +139,9 @@ const styles = StyleSheet.create((theme)=>({
     borderRadius: 15,
     padding: theme.space[0],
     width: theme.sizes[9],
+    marginTop: 20,
+    right: Dimensions.get('window').width * 0.05,
+
   },
   notificationWrapper:{
     paddingBottom:15,

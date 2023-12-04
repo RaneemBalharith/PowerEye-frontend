@@ -27,6 +27,7 @@ useEffect(()=>{
 },[room])
   return (
     <View style={styles.EnergyCard}>
+      
       <LinearGradient
         colors={['#34888F', '#9EB8B5']} style={styles.roomNameBackground}>
         <View style={styles.CardTitleWrapper}>
@@ -35,7 +36,7 @@ useEffect(()=>{
            
         </View>
       </LinearGradient> 
-    
+ 
       <View style={styles.EnergyInfo}>
           <MaterialCommunityIcons
             style={styles.icons}
@@ -73,18 +74,18 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   roomName: {
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: "bold",
     marginRight: 10,
     color: "black",
-  
+   
     
   },
   EnergyCardText: {
     fontSize: 12,
     color: "#00707C",
     fontWeight: "bold",
-    margin: 10,
+   margin:10,
     color: '#00707C',
   },
   CardTitleWrapper: {
@@ -98,19 +99,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 10,
+    width: windowWidth * 0.9,
   },
   roomNameBackground: {
     borderRadius: 5,
     paddingVertical: 5, 
-    margin: 0,
+    width: windowWidth * 0.9,
     
-    width: 385,
-    height:30,
   },
   loginIcon: {
     marginTop:10,
     marginBottom: 20,
-    marginLeft: 190,
+    marginLeft: 70,
   },
 });
 

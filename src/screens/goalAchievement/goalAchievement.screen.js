@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, ScrollView, TouchableWithoutFeedback, Keyboard, Dimensions, TouchableOpacity, Modal } from 'react-native';
+import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback, Keyboard, Dimensions, TouchableOpacity, Modal } from 'react-native';
 import SaveGoal from '../../components/saveGoalChanges';
 import { Ionicons } from '@expo/vector-icons';
 import { GoalAchievement } from '../../components/goalAchievement';
@@ -69,6 +69,10 @@ export const GoalAchievementScreen =({navigation})=>{
 
   return (
     <View style={styles.container}>
+      <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
       <ScrollView >
         <TouchableWithoutFeedback onPress={() => {
           Keyboard.dismiss();
@@ -151,6 +155,7 @@ export const GoalAchievementScreen =({navigation})=>{
           </View>
         </TouchableWithoutFeedback>
       </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
 }
