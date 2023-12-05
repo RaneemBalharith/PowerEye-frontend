@@ -1,4 +1,4 @@
-const baseUrl = "http://192.168.1.7:5000"
+const baseUrl = "http://192.168.68.126:5000"
 
 export const authRequest = async (email, password) => {
   const response = await fetch(`${baseUrl}/login`, {
@@ -36,7 +36,7 @@ export const logoutRequest = async (token) => {
   resualt = await response.json()
   return resualt
 }
-export const editProfileInfoRequest = async (token,username,power_eye_password,meross_password) => {
+export const editProfileInfoRequest = async (token, username, power_eye_password, meross_password) => {
   const response = await fetch(`${baseUrl}/user`, {
     method: "PUT",
     headers: {
@@ -86,7 +86,7 @@ export const deleteUserAccountRequest = async (token) => {
   resualt = await response.json()
   return resualt
 }
-export const getTotalEnergyRequest = async (token,timeframe,timeSinceCurrent) => {
+export const getTotalEnergyRequest = async (token, timeframe, timeSinceCurrent) => {
   const response = await fetch(`${baseUrl}/total_energy/${timeframe}/${timeSinceCurrent}`, {
     method: "GET",
     headers: {
@@ -111,7 +111,7 @@ export const getSmartPlugsRequest = async (token) => {
   return resualt
 }
 
-export const addApplianceRequest = async (token, name , cloud_id , type) => {
+export const addApplianceRequest = async (token, name, cloud_id, type) => {
   const response = await fetch(`${baseUrl}/appliance`, {
     method: "POST",
     headers: {
@@ -148,7 +148,7 @@ export const changeApplianceNameRequest = async (token, name, id) => {
   resualt = await response.json()
   return resualt
 }
-export const getApplianceWithtIdRequest = async (token,appliance_id) => {
+export const getApplianceWithtIdRequest = async (token, appliance_id) => {
   const response = await fetch(`${baseUrl}/appliance/${appliance_id}`, {
     method: "GET",
     headers: {
@@ -176,7 +176,7 @@ export const getAllApplianceRequest = async (token) => {
   resualt = await response.json()
   return resualt
 }
-export const switchApplianceRequest = async (token,id,status) => {
+export const switchApplianceRequest = async (token, id, status) => {
 
   const response = await fetch(`${baseUrl}/switch_appliance/${id}`, {
     method: "PUT",
@@ -195,14 +195,14 @@ export const switchApplianceRequest = async (token,id,status) => {
   resualt = await response.json()
   return resualt
 }
-export const deleteApplianceRequest = async (token,appliance_id) => {
+export const deleteApplianceRequest = async (token, appliance_id) => {
   const response = await fetch(`${baseUrl}/delete_appliance/${appliance_id}`, {
     method: "DELETE",
     headers: {
       "content-type": "application/json",
       "Authorization": `Bearer ${token}`
     },
-    
+
 
   })
   resualt = await response.json()
@@ -217,7 +217,7 @@ export const addGoalRequest = async (token, goal) => {
     },
     body: JSON.stringify(
       {
-        "energy_goal":goal
+        "energy_goal": goal
       }
     )
 
@@ -251,7 +251,7 @@ export const deleteGoalRequest = async (token) => {
   return resualt
 }
 // all room api requests
-export const addNewRoomRequest = async (token, appliance_ids , name) => {
+export const addNewRoomRequest = async (token, appliance_ids, name) => {
 
   const response = await fetch(`${baseUrl}/create_room`, {
     method: "POST",
@@ -261,8 +261,8 @@ export const addNewRoomRequest = async (token, appliance_ids , name) => {
     },
     body: JSON.stringify(
       {
-        "name" : name,
-        "appliance_ids":appliance_ids
+        "name": name,
+        "appliance_ids": appliance_ids
       }
     )
 
@@ -278,13 +278,13 @@ export const getRoomsRequest = async (token) => {
       "content-type": "application/json",
       "Authorization": `Bearer ${token}`
     },
-    
+
 
   })
   resualt = await response.json()
   return resualt
 }
-export const getRoomAppliancesRequest = async (token,room_id) => {
+export const getRoomAppliancesRequest = async (token, room_id) => {
 
   const response = await fetch(`${baseUrl}/get_room_appliances/${room_id}`, {
     method: "GET",
@@ -292,7 +292,7 @@ export const getRoomAppliancesRequest = async (token,room_id) => {
       "content-type": "application/json",
       "Authorization": `Bearer ${token}`
     },
-    
+
 
   })
   resualt = await response.json()
@@ -307,10 +307,10 @@ export const switchRoomApplianceRequest = async (token, room_id, new_status) => 
       "content-type": "application/json",
       "Authorization": `Bearer ${token}`
     },
-    body:JSON.stringify({
-      "new_status":new_status
+    body: JSON.stringify({
+      "new_status": new_status
     })
-    
+
 
   })
   resualt = await response.json()
@@ -324,10 +324,10 @@ export const addApplianceToRoomRequest = async (token, room_id, appliance_ids) =
       "content-type": "application/json",
       "Authorization": `Bearer ${token}`
     },
-    body:JSON.stringify({
-      "appliance_ids":appliance_ids
+    body: JSON.stringify({
+      "appliance_ids": appliance_ids
     })
-    
+
 
   })
   resualt = await response.json()
@@ -356,10 +356,10 @@ export const updateRoomNameRequest = async (token, room_id, new_name) => {
       "content-type": "application/json",
       "Authorization": `Bearer ${token}`
     },
-    body:JSON.stringify({
-      "new_name":new_name
+    body: JSON.stringify({
+      "new_name": new_name
     })
-    
+
 
   })
   resualt = await response.json()
@@ -381,7 +381,7 @@ export const deleteRoomRequest = async (token, room_id) => {
 }
 //energy
 
-export const getApplianceEnergyRequest = async (token,applianceId,time) => {
+export const getApplianceEnergyRequest = async (token, applianceId, time) => {
   const response = await fetch(`${baseUrl}/appliance_energy/${time}/${applianceId}`, {
     method: "GET",
     headers: {
@@ -393,7 +393,7 @@ export const getApplianceEnergyRequest = async (token,applianceId,time) => {
   resualt = await response.json()
   return resualt
 }
-export const getRoomEnergyRequest = async (token,roomId,time) => {
+export const getRoomEnergyRequest = async (token, roomId, time) => {
   const response = await fetch(`${baseUrl}/room_energy/${time}/${roomId}`, {
     method: "GET",
     headers: {
@@ -405,7 +405,7 @@ export const getRoomEnergyRequest = async (token,roomId,time) => {
   resualt = await response.json()
   return resualt
 }
-export const getTheTotalEnergyRequest = async (token,time) => {
+export const getTheTotalEnergyRequest = async (token, time) => {
   const response = await fetch(`${baseUrl}/total_energy/${time}`, {
     method: "GET",
     headers: {
@@ -418,7 +418,7 @@ export const getTheTotalEnergyRequest = async (token,time) => {
   return resualt
 }
 
-export const getMostRecentReadingRequest = async (token,appliance_id) => {
+export const getMostRecentReadingRequest = async (token, appliance_id) => {
   const response = await fetch(`${baseUrl}/get_most_recent_reading/${appliance_id}`, {
     method: "GET",
     headers: {
@@ -430,7 +430,7 @@ export const getMostRecentReadingRequest = async (token,appliance_id) => {
   resualt = await response.json()
   return resualt
 }
-export const sentFcmToken = async (token, fcm_token ,device_id ) => {
+export const sentFcmToken = async (token, fcm_token, device_id) => {
 
   const response = await fetch(`${baseUrl}/FCM_token`, {
     method: "POST",
@@ -440,8 +440,8 @@ export const sentFcmToken = async (token, fcm_token ,device_id ) => {
     },
     body: JSON.stringify(
       {
-        "device_id" : device_id,
-        "fcm_token":fcm_token
+        "device_id": device_id,
+        "fcm_token": fcm_token
       }
     )
 
@@ -451,40 +451,40 @@ export const sentFcmToken = async (token, fcm_token ,device_id ) => {
 }
 const path = require('path');
 
-export const uploadImage = async (token,file,uri) => {
+export const uploadImage = async (token, file, uri) => {
 
   const { base: filenameWithExtension, ext: fileExtension } = path.parse(uri);
   let extension = fileExtension.replace(".", "");
   let filename = filenameWithExtension.substring(0, filenameWithExtension.lastIndexOf("."));
 
-      const response = await fetch(`${baseUrl}/profile_pic`, {
-        method: 'POST',
-  
-        headers:{
-          "content-type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          "file": file,
-          "filename":filename,
-          "extension": extension
-          })
-      });
-      resualt = await response.json()
-      return resualt
-      
-  };
-  export const getImage =async(token)=>{
-  
-    const response = await fetch(`${baseUrl}/profile_pic`, {
-      method: "GET",
-      headers: {
-        "content-type": "application/json",
-        "Authorization": `Bearer ${token}`
-      },
-    })
-    let resualt = await response.json()
-    return resualt
-  }
+  const response = await fetch(`${baseUrl}/profile_pic`, {
+    method: 'POST',
 
-  
+    headers: {
+      "content-type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify({
+      "file": file,
+      "filename": filename,
+      "extension": extension
+    })
+  });
+  resualt = await response.json()
+  return resualt
+
+};
+export const getImage = async (token) => {
+
+  const response = await fetch(`${baseUrl}/profile_pic`, {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+  })
+  let resualt = await response.json()
+  return resualt
+}
+
+

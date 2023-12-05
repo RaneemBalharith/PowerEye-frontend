@@ -20,13 +20,15 @@
       "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
-      "permissions": ["INTERNET"],
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.reem_hej.PowerEye"
+      "package": "com.reem_hej.PowerEye",
+      "permissions": [
+        "INTERNET"
+      ]
     },
     "plugins": [
       "@react-native-firebase/app",
@@ -42,11 +44,11 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "owner": "raneem_balharith1",
     "extra": {
       "eas": {
         "projectId": "1bef8642-13aa-45d0-a14d-18321758394a"
       }
-    },
-    "owner": "raneem_balharith1"
+    }
   }
 }
