@@ -5,8 +5,9 @@ import { ThemeContext } from "../../services/theme.context";
 import { logoutRequest } from '../../api/apiManager';
 export const LogoutModal = ({navigation,onModalShow , setOnModalShow}) => {
     const {setToken,token} = useContext(PowerEyeContext)
-  const goLoginScreen = () =>{
-    logoutRequest(token).then((res)=>{
+  const goLoginScreen = async () =>{
+    let device_id = Platform.OS === 'ios' ? await Application.getIosIdForVendorAsync() : Application.androidId;
+    logoutRequest(token, device_id).then((res)=>{
       console.log(res)
     })
     setToken("")

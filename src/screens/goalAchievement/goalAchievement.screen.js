@@ -1,11 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback, Keyboard, Dimensions, TouchableOpacity, Modal } from 'react-native';
+import { StyleSheet, Text, View, TextInput, ScrollView, TouchableWithoutFeedback, Keyboard, Dimensions, TouchableOpacity, Modal } from 'react-native';
 import SaveGoal from '../../components/saveGoalChanges';
 import { Ionicons } from '@expo/vector-icons';
 import { GoalAchievement } from '../../components/goalAchievement';
 import { PowerEyeContext } from '../../services/powerEye.context';
-import { addGoalRequest,deleteGoalRequest } from '../../api/apiManager';
+import { addGoalRequest,deleteGoalRequest,getLastMonthEnergy } from '../../api/apiManager';
 
 
 const windowWidth = Dimensions.get("window").width;
@@ -19,6 +19,16 @@ export const GoalAchievementScreen =({navigation})=>{
   const [percentage, setPercentage] = useState(null);
   const [analysis, setAnalysis] = useState('No Goal');
   const [modalVisible, setModalVisible] = useState(false);
+  const [energyValueDB,setEnergyValueDB] = useState(0)
+  const compareCostGoal = (costGoal, lastMonthEnergy) => {
+    const lastMonthCost = convertEnergyToCost(lastMonthEnergy);
+  
+    let percentage = (costGoal / lastMonthCost)*100;
+     percentage = Math.fixed(percentage);
+  
+     return percentage;
+  
+  }
   const handleButtonPress = () => {
     if (!validateInput()) {
       return;
@@ -28,8 +38,8 @@ export const GoalAchievementScreen =({navigation})=>{
     addGoalRequest(token,convertCostToEnergy(inputValue)).then((res)=>{
       setRefresh('goal saved')
     })
-  };
 
+  };
 
 
 
@@ -66,13 +76,29 @@ export const GoalAchievementScreen =({navigation})=>{
     return true;
   };
 
+useEffect(()=>{
+  getLastMonthEnergy(token).then((res)=>{
+    
+    const costGoal = convertEnergyToCost(energyGoal);
+    const lastMonthCost = convertEnergyToCost(res);
+    console.log(costGoal,lastMonthCost)
+    const percentage = compareCostGoal(costGoal, lastMonthCost);
+    setPercentage(percentage);
 
+    // Determine the analysis text based on the comparison
+    let newAnalysis = '';
+    if (costGoal > lastMonthCost) {
+      newAnalysis = 'greater than last month.';
+    } else if (costGoal < lastMonthCost) {
+      newAnalysis = 'less than last month';
+    } else {
+      newAnalysis = 'same as last month';
+    }
+    setAnalysis(newAnalysis);
+  })
+},[])
   return (
     <View style={styles.container}>
-      <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
-    >
       <ScrollView >
         <TouchableWithoutFeedback onPress={() => {
           Keyboard.dismiss();
@@ -88,7 +114,9 @@ export const GoalAchievementScreen =({navigation})=>{
             </View>
             <View style={styles.GoalAchievementCard}>
               <View style={styles.CardTitleWrapper}>
-                <Text style={styles.GoalAchievementTitle}> The goal is:{energyGoal == -1 ? 0:convertEnergyToCost(energyGoal)}</Text>
+              <Text style={styles.GoalAchievementTitle}> The goal is:<Text style={styles.GoalAchievementTitleInside}>  {percentage !== null && (
+                  <Text >{percentage}%</Text>
+                )}  </Text>{analysis}</Text>
               </View>
             </View>
             <View>
@@ -155,7 +183,6 @@ export const GoalAchievementScreen =({navigation})=>{
           </View>
         </TouchableWithoutFeedback>
       </ScrollView>
-      </KeyboardAvoidingView>
     </View>
   );
 }

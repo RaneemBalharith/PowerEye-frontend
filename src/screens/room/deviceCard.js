@@ -11,10 +11,10 @@ import {
 } from "react-native";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { AntDesign } from "@expo/vector-icons";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { Icon } from "./devicesIcons";
 import { ThemeContext } from "../../services/theme.context";
-import { switchApplianceRequest } from "../../api/apiManager";
+import { switchApplianceRequest, getApplianceEnergyRequest } from "../../api/apiManager";
 import { PowerEyeContext } from "../../services/powerEye.context";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -22,66 +22,126 @@ export const DeviceCard = ({
   deviceState,
   username,
   device,
-  consumption,
   connection,
-  cost,
-  onRemoveApplianceFromRoom,
-  id,
+  appliance,
+  id
 }) => {
   const { theme } = useContext(ThemeContext);
-  const { token } = useContext(PowerEyeContext);
+  const { token, setRefresh, convertEnergyToCost } = useContext(PowerEyeContext)
   const [wifiConnected, setWifiConected] = useState(connection);
-
+  const [deviceStateChange, setDeviceStateChange] = useState(deviceState)
+  const [applianceEnergy, setApplianceEnergy] = useState(0)
   const handleStatus = () => {
-    console.log(id);
-    switchApplianceRequest(token, id, !deviceState).then((res) => {
-      console.log(res);
-    });
-  };
+    console.log(id)
+    switchApplianceRequest(token, id, !deviceStateChange).then((res) => {
+
+      setDeviceStateChange(!deviceStateChange)
+    })
+
+
+  }
+
+  useEffect(() => {
+    getApplianceEnergyRequest(token, id, 'daily').then(res => {
+      setApplianceEnergy(res)
+    })
+  }, [])
 
   return (
     <ImageBackground
       style={styles(theme).image}
       imageStyle={{ borderRadius: 10, opacity: 0.6 }}
       source={
-        !false
+        !deviceStateChange
           ? require("../../../assets/green.jpeg")
           : require("../../../assets/orange.jpeg")
       }
     >
-      <AntDesign
-        style={{ alignSelf: "flex-end", margin: 2 }}
-        name="minuscircle"
-        size={15}
-        color={"#b30000"}
-        onPress={() => onRemoveApplianceFromRoom(id)}
-      />
+      <View style={styles(theme).item}>
+        <View style={styles(theme).cardToolsWrapper}>
+          <View style={styles(theme).iconsWrapper}>
+            <Icon
+              IconStyle={styles(theme).icons}
+              size={20}
+              color={"#00707C"}
+              id={device}
+            />
+          </View>
 
-      <View
-        style={{
-          flexDirection: "row",
-          padding: 4,
-          justifyContent: "center",
-          alignItems: "center",
-          marginLeft:5,
-        }}
-      >
-        <Icon
-          IconStyle={styles(theme).icons}
-          size={40}
-          color={"#00707C"}
-          id={device}
-        />
+          <View style={styles(theme).iconsWrapper}>
+            <TouchableOpacity >
+              <MaterialCommunityIcons
+                style={styles(theme).icons}
+                name="wifi"
+                color={deviceStateChange ? "#00707C" : "rgba(0,0,0,0.4)"}
+                size={20}
+              />
+            </TouchableOpacity>
+          </View>
 
-        <Text
-          style={{
-            fontSize: 12,
-            fontWeight: "bold",
-            color: "rgba(0,0,0,0.8)",
-          }}
-        >
-          {username}
-        </Text>
+          <View style={styles(theme).iconsWrapper}>
+            <TouchableOpacity onPress={() => handleStatus()}>
+              <MaterialCommunityIcons
+                style={styles(theme).icons}
+                name="power-standby"
+                color={deviceStateChange ? "#00707C" : "rgba(0,0,0,0.4)"}
+                size={20}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles(theme).cardInfo}>
+          <Text
+            style={{
+              fontSize: 14,
+              fontWeight: "bold",
+              color: "rgba(0,0,0,0.8)",
+            }}
+          >
+            {username}
+          </Text>
+          <View style={{ flexDirection: "row" }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <MaterialCommunityIcons
+                style={{
+                  margin: 5,
+                }}
+                name={"power-plug"}
+                color={"#00707C"}
+                size={20}
+              />
+              <Text style={{ fontSize: 10, fontWeight: "bold" }}>
+                {applianceEnergy.toFixed(3)} Kwh
+              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                marginRight: 20,
+              }}
+            >
+              <FontAwesome5
+                style={{
+                  margin: 3,
+                }}
+                name={"wallet"}
+                color={"#00707C"}
+                size={15}
+              />
+              <Text style={{ fontSize: 10, fontWeight: "bold" }}>
+                {convertEnergyToCost(applianceEnergy)} SAR
+              </Text>
+            </View>
+          </View>
+        </View>
       </View>
     </ImageBackground>
   );
@@ -97,13 +157,10 @@ const styles = StyleSheet.create((theme) => ({
     margin: theme.space[1],
     alignItems: "center",
     borderRadius: 100,
-
-    height: windowWidth * 0.18,
-    alignItems: "center",
-    justifyContent: "center",
   },
   item: {
-    height: windowWidth * 0.18,
+    width: windowWidth * 0.41,
+    height: windowWidth * 0.4,
     borderRadius: 10,
     alignItems: "center",
     padding: theme.space[1],
@@ -122,7 +179,7 @@ const styles = StyleSheet.create((theme) => ({
     alignItems: "center",
   },
   icons: {
-    marginRight: 10,
+    padding: theme.space[1],
   },
   iconsWrapper: {
     backgroundColor: "rgba(0,0,0,0.25)",

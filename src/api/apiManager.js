@@ -24,14 +24,16 @@ export const signupRequest = async (email, powerEyePassword, merossPassword) => 
   resualt = await response.json()
   return resualt
 }
-export const logoutRequest = async (token) => {
+export const logoutRequest = async (token, device_id) => {
   const response = await fetch(`${baseUrl}/logout`, {
     method: "POST",
     headers: {
       "content-type": "application/json",
       "Authorization": `Bearer ${token}`
     },
-
+    body: JSON.stringify({
+      device_id: device_id,
+    })
   })
   resualt = await response.json()
   return resualt
@@ -487,4 +489,15 @@ export const getImage = async (token) => {
   return resualt
 }
 
+export const getLastMonthEnergy = async (token) => {
 
+  const response = await fetch(`${baseUrl} / past_month_total_energy`, {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+  })
+  let resualt = await response.json()
+  return resualt
+}

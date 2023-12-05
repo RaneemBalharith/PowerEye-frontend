@@ -9,10 +9,10 @@ import {
 } from "react-native";
 import Fontisto from "@expo/vector-icons/Fontisto";
 const windowWidth = Dimensions.get("window").width;
-import {DeviceCard} from './deviceCard'
+import { DeviceCard } from './deviceCard'
 import { PowerEyeContext } from "../../services/powerEye.context";
-export const DeviceCardSwiper = ({devices,onRemoveApplianceFromRoom,navigation}) => {
-  const {appliances} = useContext(PowerEyeContext)
+export const DeviceCardSwiper = ({ devices, onRemoveApplianceFromRoom, navigation }) => {
+  const { appliances } = useContext(PowerEyeContext)
   const flatListRef = useRef(null);
   const [scrollIndex, setScrollIndex] = useState(0);
 
@@ -38,13 +38,13 @@ export const DeviceCardSwiper = ({devices,onRemoveApplianceFromRoom,navigation})
 
   const onScroll = (event) => {
     const contentOffsetX = event.nativeEvent.contentOffset.x;
-    const itemWidth = 150; 
+    const itemWidth = 150;
     const newIndex = Math.round(contentOffsetX / itemWidth);
     setScrollIndex(newIndex);
   };
 
 
-console.log('this is from room',devices)
+  console.log('this is from room', devices)
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={scrollBackward}>
@@ -54,21 +54,21 @@ console.log('this is from room',devices)
         ref={flatListRef}
         horizontal
         data={devices}
-        renderItem={({ item }) => 
+        renderItem={({ item }) =>
 
-          <DeviceCard 
-          device={item.type}
-          username={item.name}
-          deviceState={item.status}
-          connection={item.connection_status}
-          onRemoveApplianceFromRoom={onRemoveApplianceFromRoom}
+          <DeviceCard
+            device={item.type}
+            username={item.name}
+            deviceState={item.status}
+            connection={item.connection_status}
+            onRemoveApplianceFromRoom={onRemoveApplianceFromRoom}
 
-          id={item.appliance_id}
-          
-           />
-  
-        
-           }
+            id={item.appliance_id}
+
+          />
+
+
+        }
         keyExtractor={(item) => item.id}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
@@ -89,8 +89,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    width: windowWidth*0.95,
+    width: windowWidth * 0.95,
   },
 });
-
 

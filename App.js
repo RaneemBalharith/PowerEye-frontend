@@ -47,9 +47,7 @@ export default function App() {
           console.log('Token:', fcmtoken)
           let device_id = Platform.OS === 'ios' ? await Application.getIosIdForVendorAsync() : Application.androidId;
 
-          sentFcmToken(getToken, fcmtoken, device_id).then((res) => {
-          })
-          // Here you have to call the token post API
+          sentFcmToken(getToken, fcmtoken, device_id).then((res) => {})
         } catch (error) {
           console.error('Error getting token:', error);
         }
@@ -103,7 +101,7 @@ export default function App() {
 
     return unsubscribe;
 
-  }, [])
+  }, [getToken])
 
   return (
     <PowerEyeContextProvider setGetToken={setGetToken} screenName={screenName} notification={notification} setScreenName={setScreenName}>

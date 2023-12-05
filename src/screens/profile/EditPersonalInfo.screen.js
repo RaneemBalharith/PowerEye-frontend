@@ -1,4 +1,4 @@
-import React, { useState,useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   View,
   Text,
@@ -15,14 +15,14 @@ import Fontisto from "@expo/vector-icons/Fontisto";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { ThemeContext } from "../../services/theme.context";
 import { PowerEyeContext } from "../../services/powerEye.context";
-import { editProfileInfoRequest,getImage,uploadImage } from "../../api/apiManager";
+import { editProfileInfoRequest, getImage, uploadImage } from "../../api/apiManager";
 import * as ImagePicker from 'expo-image-picker';
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 export const EditPersonalInfoScreen = ({ navigation }) => {
 
-    const {theme} =  useContext(ThemeContext)
-  const {image,setImage,email,setUsername,refresh,setRefresh,token} = useContext(PowerEyeContext)
+  const { theme } = useContext(ThemeContext);
+  const { image, setImage, email, setUsername, refresh, setRefresh, token } = useContext(PowerEyeContext);
   const [tempUsername, setTempUsername] = useState("");
   const [powerEyePassword, setPowerEyePassword] = useState("");
   const [merrosPassword, setMerrosPassword] = useState("");
@@ -54,28 +54,44 @@ export const EditPersonalInfoScreen = ({ navigation }) => {
     if (!result.canceled) {
 
       const base64 = await FileSystem.readAsStringAsync(result.assets[0].uri, { encoding: 'base64' });
-      
 
-      uploadImage(token,base64,result.assets[0].uri).then(async(res)=>{
-        if(res){
-          await getImage(token).then((res)=>{
+
+      uploadImage(token, base64, result.assets[0].uri).then(async (res) => {
+        if (res) {
+          await getImage(token).then((res) => {
             setImage(res.image)
           })
-        setRefresh('the image changed')
-      }
+          setRefresh('the image changed')
+        }
       }).catch(error => {
         // Handle errors
         console.error('Error during network request');
       });
     }
   };
-  const handleProfileEditChanges = () => {
-    editProfileInfoRequest(token,tempUsername,powerEyePassword,merrosPassword).then((res)=>{
-      setRefresh('profile info changed')
-    })
+  const handleProfileEditChanges = async () => {
+    try {
+      // Check if any input field is empty, and set it to null if it is
+      const username = tempUsername.trim() === '' ? null : tempUsername;
+      const powerEyePass = powerEyePassword.trim() === '' ? null : powerEyePassword;
+      const merrosPass = merrosPassword.trim() === '' ? null : merrosPassword;
+
+      const response = await editProfileInfoRequest(token, username, powerEyePass, merrosPass);
+
+      // Check the response and update state accordingly
+      if (response && response.message) {
+        setRefresh('profile info changed');
+        setEditInfoStatus(response.message);
+      } else {
+        setEditInfoStatus('Failed to update profile info');
+      }
+    } catch (error) {
+      console.error('Error updating user information:', error);
+      setEditInfoStatus('An error occurred. Please try again.');
+    }
   };
-useEffect(()=>{
-},[refresh])
+  useEffect(() => {
+  }, [refresh])
   return (
 
     <View style={styles(theme).container}>
@@ -88,8 +104,8 @@ useEffect(()=>{
         />
       </View>
       <View style={styles(theme).profilePicWrapper}>
-        
-        {image ? <Image source={{uri: image}} style={styles(theme).profilePic} /> :<Image
+
+        {image ? <Image source={{ uri: image }} style={styles(theme).profilePic} /> : <Image
           style={styles(theme).profilePic}
           source={require("../../../assets/profile.jpg")}
         />}
@@ -120,36 +136,36 @@ useEffect(()=>{
         />
         <Text style={styles(theme).inputTitles}>PowerEye Password :</Text>
         <TextInput
-            value={powerEyePassword}
-             onChangeText={handlePasswordChange}
+          value={powerEyePassword}
+          onChangeText={handlePasswordChange}
           secureTextEntry={true}
           borderColor="rgba(0,0,0,0.1)"
           style={styles(theme).input}
         />
         <Text style={styles(theme).inputTitles}>Merros Password :</Text>
         <TextInput
-                    value={merrosPassword}
-                    onChangeText={handleMerrosPasswordChange}
+          value={merrosPassword}
+          onChangeText={handleMerrosPasswordChange}
           secureTextEntry={true}
           borderColor="rgba(0,0,0,0.1)"
           style={styles(theme).input}
         />
       </View>
       <View style={styles(theme).btnWrapper}>
-    {editInfoStatus && <Text style={{color:'red',fontSiz:12}}>{editInfoStatus}</Text>}
-      <TouchableOpacity style={styles(theme).saveButton} onPress={()=>handleProfileEditChanges()}>
-        <Text style={styles(theme).btnTitle}>Save Changes</Text>
-      </TouchableOpacity>
-      
-    </View>
+        {editInfoStatus && <Text style={{ color: 'red', fontSiz: 12 }}>{editInfoStatus}</Text>}
+        <TouchableOpacity style={styles(theme).saveButton} onPress={() => handleProfileEditChanges()}>
+          <Text style={styles(theme).btnTitle}>Save Changes</Text>
+        </TouchableOpacity>
+
+      </View>
     </View>
 
 
   );
 };
-const styles = StyleSheet.create((theme)=>({
+const styles = StyleSheet.create((theme) => ({
   container: {
-    flex:1
+    flex: 1
 
   },
   angle: {
@@ -157,15 +173,15 @@ const styles = StyleSheet.create((theme)=>({
     marginLeft: theme.space[5],
   },
   profilePic: {
-    height: theme.sizes[8]*2,
-    width: theme.sizes[8]*2,
+    height: theme.sizes[8] * 2,
+    width: theme.sizes[8] * 2,
     borderWidth: 1.5,
-    borderRadius: theme.sizes[8]*2,
+    borderRadius: theme.sizes[8] * 2,
     borderColor: theme.colors.greenTransparent,
     margin: theme.space[1],
   },
   profilePicWrapper: {
-  height:"30%",
+    height: "30%",
     justifyContent: "center",
     alignItems: "center",
     margin: theme.space[1],
@@ -199,7 +215,7 @@ const styles = StyleSheet.create((theme)=>({
     color: "rgba(0,112,124,1)",
     fontWeight: "bold",
     marginLeft: theme.space[1],
-    marginTop: theme.space[1]*0.8,
+    marginTop: theme.space[1] * 0.8,
 
   },
   btnWrapper: {
@@ -211,7 +227,7 @@ const styles = StyleSheet.create((theme)=>({
   },
   saveButton: {
     height: theme.sizes[6],
-    width: theme.sizes[8]*2,
+    width: theme.sizes[8] * 2,
     backgroundColor: theme.colors.greenTransparent,
     justifyContent: "center",
     alignItems: "center",

@@ -73,7 +73,7 @@ getApplianceEnergyRequest(token,id,'daily').then(res=>{
               <MaterialCommunityIcons
                 style={styles(theme).icons}
                 name="wifi"
-                color={wifiConnected ? "#00707C" : "rgba(0,0,0,0.4)"}
+                color={!deviceStateChange ? "#00707C" : "rgba(0,0,0,0.4)"}
                 size={20}
               />
             </TouchableOpacity>
