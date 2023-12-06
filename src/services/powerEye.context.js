@@ -6,7 +6,7 @@ const useMyContext = () => {
   return useContext(PowerEyeContext);
 };
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getProfileInfoRequest, getTheTotalEnergyRequest, getImage, getRoomApplianceRequest, getSmartPlugsRequest, getRoomsRequest, getApplianceEnergyRequest, getAllApplianceRequest, getTotalEnergyRequest } from "../api/apiManager";
+import { getProfileInfoRequest, getTheTotalEnergyRequest, getImage, getRoomApplianceRequest, getSmartPlugsRequest, getRoomsRequest, getApplianceEnergyRequest, getAllApplianceRequest, getTotalEnergyRequest, getCurrentMonthEnergyRequest } from "../api/apiManager";
 const PowerEyeContextProvider = ({ children, setGetToken, screenName, notification }) => {
   const [allNotifications, setAllNotifications] = useState([])
   const [loggedIn, setLoggedIn] = useState(false);
@@ -121,8 +121,7 @@ const PowerEyeContextProvider = ({ children, setGetToken, screenName, notificati
     energy = energy.toFixed(2);
     return energy;
   };
-  const consumption = 421.8;
-  const cost = (consumption * 8.90701754386).toFixed(2);
+
   const saveToken = async () => {
     try {
 
@@ -298,18 +297,16 @@ const PowerEyeContextProvider = ({ children, setGetToken, screenName, notificati
         }
       }))
     })
-
     getImage(token).then((res) => {
-
       setImage(res.image)
-
     })
     getProfileInfoRequest(token).then((res) => {
-      // console.log(res)
       setUsername(res['user_info'].username)
       setEmail(res['user_info'].email)
       setEnergyGoal(res['user_info'].energy_goal)
-      setCurrentMonthEnergy(res['user_info'].current_month_energy)
+    })
+    getCurrentMonthEnergyRequest(token).then((res) => {
+      setCurrentMonthEnergy(res)
     })
     getRoomsRequest(token).then((res) => {
       setRooms(res['rooms'])
@@ -338,7 +335,7 @@ const PowerEyeContextProvider = ({ children, setGetToken, screenName, notificati
       getProfileInfoRequest(token).then((res) => {
         // console.log(res)
         setEnergyGoal(res['user_info'].energy_goal)
-        setCurrentMonthEnergy(res['user_info'].current_month_energy)
+        // setCurrentMonthEnergy(res['user_info'].current_month_energy)
       })
     }, 60000);
 
@@ -371,7 +368,10 @@ const PowerEyeContextProvider = ({ children, setGetToken, screenName, notificati
         setUsername(res['user_info'].username)
         setEmail(res['user_info'].email)
         setEnergyGoal(res['user_info'].energy_goal)
-        setCurrentMonthEnergy(res['user_info'].current_month_energy)
+        // setCurrentMonthEnergy(res['user_info'].current_month_energy)
+      })
+      getCurrentMonthEnergyRequest(token).then((res) => {
+        setCurrentMonthEnergy(res)
       })
       getSmartPlugsRequest(token).then((res) => {
         // console.log("plugs",res)

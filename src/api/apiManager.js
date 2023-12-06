@@ -491,13 +491,25 @@ export const getImage = async (token) => {
 
 export const getLastMonthEnergy = async (token) => {
 
-  const response = await fetch(`${baseUrl} / past_month_total_energy`, {
+  const response = await fetch(`${baseUrl}/past_month_total_energy`, {
     method: "GET",
     headers: {
       "content-type": "application/json",
       "Authorization": `Bearer ${token}`
     },
   })
-  let resualt = await response.json()
-  return resualt
+  let result = await response.json()
+  return result
+}
+
+export const getCurrentMonthEnergyRequest = async (token) => {
+  const response = await fetch(`${baseUrl}/current_month_total_energy`, {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+  })
+  let result = await response.json()
+  return result
 }

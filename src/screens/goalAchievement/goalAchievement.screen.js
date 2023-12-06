@@ -1,51 +1,62 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, ScrollView, TouchableWithoutFeedback, Keyboard, Dimensions, TouchableOpacity, Modal } from 'react-native';
+import { StyleSheet, Text, View, TextInput, ScrollView, TouchableWithoutFeedback, Keyboard, Dimensions, TouchableOpacity, Modal, KeyboardAvoidingView, Platform } from 'react-native';
 import SaveGoal from '../../components/saveGoalChanges';
 import { Ionicons } from '@expo/vector-icons';
 import { GoalAchievement } from '../../components/goalAchievement';
 import { PowerEyeContext } from '../../services/powerEye.context';
-import { addGoalRequest,deleteGoalRequest,getLastMonthEnergy } from '../../api/apiManager';
+import { addGoalRequest, deleteGoalRequest, getLastMonthEnergy } from '../../api/apiManager';
 
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
+let prevEnergy = 0;
 
 
-export const GoalAchievementScreen =({navigation})=>{
-  const {token,convertEnergyToCost,energyGoal,setRefresh,convertCostToEnergy} = useContext(PowerEyeContext)
-    const [inputValue, setInputValue] = useState('');
+export const GoalAchievementScreen = ({ navigation }) => {
+  const { token, convertEnergyToCost, energyGoal, setRefresh, convertCostToEnergy } = useContext(PowerEyeContext)
+  const [inputValue, setInputValue] = useState('');
   const [error, setError] = useState('');
   const [percentage, setPercentage] = useState(null);
   const [analysis, setAnalysis] = useState('No Goal');
   const [modalVisible, setModalVisible] = useState(false);
-  const [energyValueDB,setEnergyValueDB] = useState(0)
+  const [energyValueDB, setEnergyValueDB] = useState(0)
   const compareCostGoal = (costGoal, lastMonthEnergy) => {
     const lastMonthCost = convertEnergyToCost(lastMonthEnergy);
-  
-    let percentage = (costGoal / lastMonthCost)*100;
-     percentage = Math.fixed(percentage);
-  
-     return percentage;
-  
+    let percentage = (costGoal / lastMonthCost) * 100;
+    percentage = percentage.toFixed(2);
+    return percentage;
+
   }
   const handleButtonPress = () => {
     if (!validateInput()) {
       return;
     }
+    console.log('here', energyGoal, prevEnergy)
+    const costGoal = convertEnergyToCost(energyGoal);
+    const lastMonthCost = convertEnergyToCost(prevEnergy);
+    const percentage = compareCostGoal(costGoal, prevEnergy);
+    setPercentage(percentage);
+    let newAnalysis = '';
+    if (costGoal > lastMonthCost) {
+      newAnalysis = 'greater than last month.';
+    } else if (costGoal < lastMonthCost) {
+      newAnalysis = 'less than last month';
+    } else {
+      newAnalysis = 'same as last month';
+    }
+    setAnalysis(newAnalysis);
 
     console.log('save change successfully');
-    addGoalRequest(token,convertCostToEnergy(inputValue)).then((res)=>{
+    addGoalRequest(token, convertCostToEnergy(inputValue)).then((res) => {
       setRefresh('goal saved')
     })
 
   };
 
-
-
   const handleRemoveGoal = () => {
     setModalVisible(true);
-    
+
   };
 
   const confirmRemoveGoal = () => {
@@ -54,7 +65,7 @@ export const GoalAchievementScreen =({navigation})=>{
     setModalVisible(false);
     setPercentage(null); // Reset percentage to null
     setAnalysis('No Goal'); // Reset analysis to 'No Goal'
-    deleteGoalRequest(token).then((res)=>{
+    deleteGoalRequest(token).then((res) => {
       console.log(res)
     })
     setRefresh('goal deleted')
@@ -76,113 +87,117 @@ export const GoalAchievementScreen =({navigation})=>{
     return true;
   };
 
-useEffect(()=>{
-  getLastMonthEnergy(token).then((res)=>{
-    
-    const costGoal = convertEnergyToCost(energyGoal);
-    const lastMonthCost = convertEnergyToCost(res);
-    console.log(costGoal,lastMonthCost)
-    const percentage = compareCostGoal(costGoal, lastMonthCost);
-    setPercentage(percentage);
+  useEffect(() => {
+    getLastMonthEnergy(token).then((res) => {
+      prevEnergy = res;
+      const costGoal = convertEnergyToCost(energyGoal);
+      const lastMonthCost = convertEnergyToCost(res);
+      console.log(costGoal, lastMonthCost)
+      const percentage = compareCostGoal(costGoal, res);
+      setPercentage(percentage);
 
-    // Determine the analysis text based on the comparison
-    let newAnalysis = '';
-    if (costGoal > lastMonthCost) {
-      newAnalysis = 'greater than last month.';
-    } else if (costGoal < lastMonthCost) {
-      newAnalysis = 'less than last month';
-    } else {
-      newAnalysis = 'same as last month';
-    }
-    setAnalysis(newAnalysis);
-  })
-},[])
+      // Determine the analysis text based on the comparison
+      let newAnalysis = '';
+      if (costGoal > lastMonthCost) {
+        newAnalysis = 'greater than last month.';
+      } else if (costGoal < lastMonthCost) {
+        newAnalysis = 'less than last month';
+      } else {
+        newAnalysis = 'same as last month';
+      }
+      setAnalysis(newAnalysis);
+    })
+  }, [])
   return (
     <View style={styles.container}>
-      <ScrollView >
-        <TouchableWithoutFeedback onPress={() => {
-          Keyboard.dismiss();
-          console.log('dismissed keyboard');
-        }}>
-          <View>
-            <View style={styles.header}>
-              <Ionicons name="arrow-back-outline" size={35} color="#00707C" style={styles.backArrow} onPress={() => navigation.goBack()} />
-              <Text style={styles.title}>Goal Settings</Text>
-            </View>
+      <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        style={styles.container}>
+        <ScrollView >
+          <TouchableWithoutFeedback onPress={() => {
+            Keyboard.dismiss();
+            console.log('dismissed keyboard');
+          }}>
             <View>
-              <GoalAchievement progress={40} />
-            </View>
-            <View style={styles.GoalAchievementCard}>
-              <View style={styles.CardTitleWrapper}>
-              <Text style={styles.GoalAchievementTitle}> The goal is:<Text style={styles.GoalAchievementTitleInside}>  {percentage !== null && (
-                  <Text >{percentage}%</Text>
-                )}  </Text>{analysis}</Text>
+              <View style={styles.header}>
+                <Ionicons name="arrow-back-outline" size={35} color="#00707C" style={styles.backArrow} onPress={() => navigation.goBack()} />
+                <Text style={styles.title}>Goal Settings</Text>
               </View>
-            </View>
-            <View>
-              <Text style={styles.edit}>Edit Goal Settings:</Text>
-              <View style={styles.specf}>
-                <Text>-  The input must be a numeric value.</Text>
-                <Text>-  The input must be a positive value.</Text>
-                <Text>-  Input must be less/equal total energy cost since the beginning of the month. </Text>
+              <View>
+                <GoalAchievement progress={40} />
               </View>
-            </View>
-            <View style={styles.field}>
-              <Text style={styles.addGoal}>Cost Goal: </Text>
-              <View style={styles.inputContainer}>
-                <TextInput
-                  style={[styles.input, error && styles.inputError]}
-                  placeholder="e.g. 4357"
-                  placeholderTextColor="#CCCCCC"
-                  autoCapitalize="none"
-                  keyboardType="numeric"
-                  value={inputValue}
-                  onChangeText={text => setInputValue(text)}
-
-                />
-
-                {error ? <Text style={styles.errorText}>{error}</Text> : null}
-
-
-              </View>
-            </View>
-
-            <View>
-
-            </View>
-            <View style={styles.buttons}>
-              <SaveGoal text="Save Changes" onPress={handleButtonPress} error={error} />
-              <TouchableOpacity onPress={handleRemoveGoal}>
-                <View style={styles.removeGoalButton}>
-                  <Text style={styles.removeGoalText}>Remove Goal</Text>
+              <View style={styles.GoalAchievementCard}>
+                <View style={styles.CardTitleWrapper}>
+                  <Text style={styles.GoalAchievementTitle}> The goal is:<Text style={styles.GoalAchievementTitleInside}>  {percentage !== null && (
+                    <Text >{percentage}%</Text>
+                  )}  </Text>{analysis}</Text>
                 </View>
-              </TouchableOpacity>
-            </View>
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={modalVisible}
-              onRequestClose={() => setModalVisible(false)}
-            >
-              <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                  <Text style={styles.modalTitle}>Are you sure you want to Remove your goal?</Text>
-                  <Text style={styles.modalContent}>Once you remove this goal, it can’t be restored.
-                    You will lose access to to past data and analysis.</Text>
-                  <View style={styles.modalButtonContainer}>
-                    <TouchableOpacity style={styles.confirmButton} onPress={confirmRemoveGoal}>
-                      <Text>Remove</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.cancelButton} onPress={cancelRemoveGoal}>
-                      <Text>Cancel</Text>
-                    </TouchableOpacity>
+              </View>
+              <View>
+                <Text style={styles.edit}>Edit Goal Settings:</Text>
+                <View style={styles.specf}>
+                  <Text>-  The input must be a numeric value.</Text>
+                  <Text>-  The input must be a positive value.</Text>
+                  <Text>-  Input must be less/equal total energy cost since the beginning of the month. </Text>
+                </View>
+              </View>
+              <View style={styles.field}>
+                <Text style={styles.addGoal}>Cost Goal: </Text>
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    style={[styles.input, error && styles.inputError]}
+                    placeholder="e.g. 4357"
+                    placeholderTextColor="#CCCCCC"
+                    autoCapitalize="none"
+                    keyboardType="numeric"
+                    value={inputValue}
+                    onChangeText={text => setInputValue(text)}
+
+                  />
+
+                  {error ? <Text style={styles.errorText}>{error}</Text> : null}
+
+
+                </View>
+              </View>
+
+              <View>
+
+              </View>
+              <View style={styles.buttons}>
+                <SaveGoal text="Save Changes" onPress={handleButtonPress} error={error} />
+                <TouchableOpacity onPress={handleRemoveGoal}>
+                  <View style={styles.removeGoalButton}>
+                    <Text style={styles.removeGoalText}>Remove Goal</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+              >
+                <View style={styles.centeredView}>
+                  <View style={styles.modalView}>
+                    <Text style={styles.modalTitle}>Are you sure you want to Remove your goal?</Text>
+                    <Text style={styles.modalContent}>Once you remove this goal, it can’t be restored.
+                      You will lose access to to past data and analysis.</Text>
+                    <View style={styles.modalButtonContainer}>
+                      <TouchableOpacity style={styles.confirmButton} onPress={confirmRemoveGoal}>
+                        <Text>Remove</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.cancelButton} onPress={cancelRemoveGoal}>
+                        <Text>Cancel</Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
-              </View>
-            </Modal>
-          </View>
-        </TouchableWithoutFeedback>
-      </ScrollView>
+              </Modal>
+            </View>
+          </TouchableWithoutFeedback>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
 }
@@ -218,7 +233,7 @@ const styles = StyleSheet.create({
   },
   specf: {
     paddingLeft: 45,
-    
+
   },
   input: {
     marginRight: 30,

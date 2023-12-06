@@ -1,19 +1,27 @@
-import React, {useState, useContext} from 'react';
-import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
+import React, { useState, useContext } from 'react';
+import { Alert, Modal, StyleSheet, Text, Pressable, View } from 'react-native';
 import { PowerEyeContext } from '../../services/powerEye.context';
 import { ThemeContext } from "../../services/theme.context";
 import { logoutRequest } from '../../api/apiManager';
-export const LogoutModal = ({navigation,onModalShow , setOnModalShow}) => {
-    const {setToken,token} = useContext(PowerEyeContext)
-  const goLoginScreen = async () =>{
-    let device_id = Platform.OS === 'ios' ? await Application.getIosIdForVendorAsync() : Application.androidId;
-    logoutRequest(token, device_id).then((res)=>{
-      console.log(res)
-    })
-    setToken("")
-    setOnModalShow(!onModalShow)
-  }
-  const {theme} = useContext(ThemeContext)
+import * as Application from 'expo-application';
+import { Platform } from 'react-native';
+export const LogoutModal = ({ navigation, onModalShow, setOnModalShow }) => {
+  const { setToken, token } = useContext(PowerEyeContext)
+  const goLoginScreen = async () => {
+    try {
+      let device_id = Platform.OS === 'ios' ? await Application.getIosIdForVendorAsync() : Application.androidId;
+      await logoutRequest(token, device_id);
+      console.log("Logout successful");
+      setToken("");
+      setOnModalShow(!onModalShow);
+    } catch (error) {
+      console.error("Logout error:", error);
+      // Handle error here
+    }
+  };
+
+  const { theme } = useContext(ThemeContext);
+
   return (
     <View style={styles(theme).centeredView}>
       <Modal
@@ -27,32 +35,32 @@ export const LogoutModal = ({navigation,onModalShow , setOnModalShow}) => {
         <View style={styles(theme).centeredView}>
           <View style={styles(theme).modalView}>
             <Text style={styles(theme).modalText}>Logout</Text>
-            
+
             <Text style={styles(theme).descreption}>
               Are you sure you want to logout ?
             </Text>
             <View style={styles(theme).buttonsWrapper}>
               <Pressable
-              style={styles(theme).deleteButton}
-              onPress={() => goLoginScreen()}>
-              <Text style={styles(theme).textStyle}>Yes</Text>
-            </Pressable>
-            <Pressable
-              style={styles(theme).button}
-              onPress={() => setOnModalShow(!onModalShow)}>
-              <Text style={styles(theme).textStyle}>Cancel</Text>
-            </Pressable>
-          
+                style={styles(theme).deleteButton}
+                onPress={() => goLoginScreen()}>
+                <Text style={styles(theme).textStyle}>Yes</Text>
+              </Pressable>
+              <Pressable
+                style={styles(theme).button}
+                onPress={() => setOnModalShow(!onModalShow)}>
+                <Text style={styles(theme).textStyle}>Cancel</Text>
+              </Pressable>
+
             </View>
           </View>
         </View>
       </Modal>
-    
+
     </View>
   );
 };
 
-const styles = StyleSheet.create((theme)=>({
+const styles = StyleSheet.create((theme) => ({
   centeredView: {
     flex: 1,
     justifyContent: 'center',
@@ -61,7 +69,7 @@ const styles = StyleSheet.create((theme)=>({
   },
   modalView: {
     margin: theme.space[3],
-    width:'85%',
+    width: '85%',
     backgroundColor: theme.colors.background,
     borderRadius: 20,
     padding: theme.space[0],
@@ -78,25 +86,25 @@ const styles = StyleSheet.create((theme)=>({
     elevation: 5,
   },
   button: {
-    justifyContent:'center',
-    alignItems:'center',
-    height:theme.sizes[5],
-    width:theme.sizes[5]*4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: theme.sizes[5],
+    width: theme.sizes[5] * 4,
     borderRadius: 20,
 
     elevation: 2,
     backgroundColor: 'gray',
-    margin:theme.space[3],
+    margin: theme.space[3],
   },
   deleteButton: {
-    justifyContent:'center',
-    alignItems:'center',
-    height:theme.sizes[5],
-    width:theme.sizes[5]*4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: theme.sizes[5],
+    width: theme.sizes[5] * 4,
     borderRadius: 20,
     elevation: 2,
     backgroundColor: theme.colors.error,
-    margin:theme.space[3],
+    margin: theme.space[3],
   },
 
   textStyle: {
@@ -106,22 +114,22 @@ const styles = StyleSheet.create((theme)=>({
   },
   modalText: {
 
-    fontSize:theme.sizes[3],
-    fontWeight:theme.fontWeights.bold,
+    fontSize: theme.sizes[3],
+    fontWeight: theme.fontWeights.bold,
     textAlign: 'left',
-    color:theme.colors.primary,
+    color: theme.colors.primary,
 
   },
   descreption: {
     marginTop: theme.space[7],
     marginBottom: theme.space[7],
-    fontSize:theme.sizes[2],
-    fontWeight:theme.fontWeights.bold,
+    fontSize: theme.sizes[2],
+    fontWeight: theme.fontWeights.bold,
     textAlign: 'left',
-    color:theme.colors.greenTransparent,
+    color: theme.colors.greenTransparent,
   },
-  buttonsWrapper:{
-    flexDirection:'row'
-    
+  buttonsWrapper: {
+    flexDirection: 'row'
+
   }
 }));

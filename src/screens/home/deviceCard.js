@@ -14,7 +14,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { Icon } from "./devicesIcons";
 import { ThemeContext } from "../../services/theme.context";
-import { switchApplianceRequest ,getApplianceEnergyRequest} from "../../api/apiManager";
+import { switchApplianceRequest, getApplianceEnergyRequest } from "../../api/apiManager";
 import { PowerEyeContext } from "../../services/powerEye.context";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -27,25 +27,25 @@ export const DeviceCard = ({
   id
 }) => {
   const { theme } = useContext(ThemeContext);
-  const {token,setRefresh,convertEnergyToCost} = useContext(PowerEyeContext)
+  const { token, setRefresh, convertEnergyToCost } = useContext(PowerEyeContext)
   const [wifiConnected, setWifiConected] = useState(connection);
-  const [deviceStateChange , setDeviceStateChange] = useState(deviceState)
-  const [applianceEnergy , setApplianceEnergy] = useState(0)
-  const handleStatus = ()=>{
+  const [deviceStateChange, setDeviceStateChange] = useState(deviceState)
+  const [applianceEnergy, setApplianceEnergy] = useState(0)
+  const handleStatus = () => {
     console.log(id)
-    switchApplianceRequest(token,id,!deviceStateChange).then((res)=>{
+    switchApplianceRequest(token, id, !deviceStateChange).then((res) => {
 
       setDeviceStateChange(!deviceStateChange)
     })
 
-    
+
   }
 
-useEffect(()=>{
-getApplianceEnergyRequest(token,id,'daily').then(res=>{
-  setApplianceEnergy(res)
-  })
-},[])
+  useEffect(() => {
+    getApplianceEnergyRequest(token, id, 'daily').then(res => {
+      setApplianceEnergy(res)
+    })
+  }, [])
 
   return (
     <ImageBackground
@@ -73,7 +73,7 @@ getApplianceEnergyRequest(token,id,'daily').then(res=>{
               <MaterialCommunityIcons
                 style={styles(theme).icons}
                 name="wifi"
-                color={!deviceStateChange ? "#00707C" : "rgba(0,0,0,0.4)"}
+                color={deviceStateChange ? "#00707C" : "rgba(0,0,0,0.4)"}
                 size={20}
               />
             </TouchableOpacity>
@@ -170,7 +170,7 @@ const styles = StyleSheet.create((theme) => ({
   cardToolsWrapper: {
     flex: 0.6,
     flexDirection: "row",
-    padding: theme.space[0]/2,
+    padding: theme.space[0] / 2,
     backgroundColor: theme.colors.blackTransparent,
     alignItems: "center",
     borderRadius: 15,
@@ -187,7 +187,7 @@ const styles = StyleSheet.create((theme) => ({
     justifyContent: "center",
     alignItems: "center",
     margin: 3,
-    height:theme.sizes[6],
+    height: theme.sizes[6],
     width: theme.sizes[6],
   },
   deviceCardWrapper: {
