@@ -16,6 +16,8 @@
     ],
     "ios": {
       "supportsTablet": true,
+      "distribution": "archive",
+      "teamId": "VY6R4JP8UY",
       "bundleIdentifier": "com.rem.PowerEye",
       "googleServicesFile": "./GoogleService-Info.plist"
     },

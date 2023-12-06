@@ -1,4 +1,4 @@
-const baseUrl = "http://192.168.68.126:5000"
+const baseUrl = "http://16.170.217.57:5000"
 
 export const authRequest = async (email, password) => {
   const response = await fetch(`${baseUrl}/login`, {
