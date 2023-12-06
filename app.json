@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "PowerEye",
-    "slug": "powereye",
+    "slug": "PowerEye",
     "version": "1.0.0",
     "sdkVersion": "49.0.0",
     "orientation": "portrait",
@@ -45,10 +45,10 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "owner": "raneem_balharith1",
+    "owner": "reem_hej",
     "extra": {
       "eas": {
-        "projectId": "1bef8642-13aa-45d0-a14d-18321758394a"
+        "projectId": "97252d10-e11a-4985-a248-b19c347152bd"
       }
     }
   }
