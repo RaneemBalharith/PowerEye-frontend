@@ -3,7 +3,6 @@
     "name": "PowerEye",
     "slug": "powereye",
     "version": "1.0.0",
-    "sdkVersion": "49.0.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
@@ -21,15 +20,13 @@
       "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
+      "permissions": ["INTERNET"],
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.reem_hej.PowerEye",
-      "permissions": [
-        "INTERNET"
-      ]
+      "package": "com.reem_hej.PowerEye"
     },
     "plugins": [
       "@react-native-firebase/app",
@@ -45,11 +42,11 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "owner": "reem_hej",
     "extra": {
       "eas": {
-        "projectId": "97252d10-e11a-4985-a248-b19c347152bd"
+        "projectId": "1bef8642-13aa-45d0-a14d-18321758394a"
       }
-    }
+    },
+    "owner": "raneem_balharith1"
   }
 }

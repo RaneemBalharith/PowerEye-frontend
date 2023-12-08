@@ -3,25 +3,16 @@ import { Alert, Modal, StyleSheet, Text, Pressable, View } from 'react-native';
 import { PowerEyeContext } from '../../services/powerEye.context';
 import { ThemeContext } from "../../services/theme.context";
 import { logoutRequest } from '../../api/apiManager';
-import * as Application from 'expo-application';
-import { Platform } from 'react-native';
 export const LogoutModal = ({ navigation, onModalShow, setOnModalShow }) => {
   const { setToken, token } = useContext(PowerEyeContext)
-  const goLoginScreen = async () => {
-    try {
-      let device_id = Platform.OS === 'ios' ? await Application.getIosIdForVendorAsync() : Application.androidId;
-      await logoutRequest(token, device_id);
-      console.log("Logout successful");
-      setToken("");
-      setOnModalShow(!onModalShow);
-    } catch (error) {
-      console.error("Logout error:", error);
-      // Handle error here
-    }
-  };
-
-  const { theme } = useContext(ThemeContext);
-
+  const goLoginScreen = () => {
+    logoutRequest(token).then((res) => {
+      console.log(res)
+    })
+    setToken("")
+    setOnModalShow(!onModalShow)
+  }
+  const { theme } = useContext(ThemeContext)
   return (
     <View style={styles(theme).centeredView}>
       <Modal

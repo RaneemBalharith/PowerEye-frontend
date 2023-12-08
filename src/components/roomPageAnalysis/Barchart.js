@@ -63,7 +63,7 @@ export const Barchart =({ data,type })=> {
           fontSize: 10,
           prefix:pre,
           position: 'bottom',
-          decimals: 3,
+          decimals: 5,
           height: 100
         }
       }}

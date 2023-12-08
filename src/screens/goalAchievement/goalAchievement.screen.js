@@ -23,10 +23,14 @@ export const GoalAchievementScreen = ({ navigation }) => {
   const [energyValueDB, setEnergyValueDB] = useState(0)
   const compareCostGoal = (costGoal, lastMonthEnergy) => {
     const lastMonthCost = convertEnergyToCost(lastMonthEnergy);
-    let percentage = (costGoal / lastMonthCost) * 100;
-    percentage = percentage.toFixed(2);
-    return percentage;
-
+    if (lastMonthCost > 0) {
+      let percentage = (costGoal / lastMonthCost) * 100;
+      percentage = percentage.toFixed(2);
+      return percentage;
+    }
+    else {
+      return null
+    }
   }
   const handleButtonPress = () => {
     if (!validateInput()) {
@@ -98,7 +102,10 @@ export const GoalAchievementScreen = ({ navigation }) => {
 
       // Determine the analysis text based on the comparison
       let newAnalysis = '';
-      if (costGoal > lastMonthCost) {
+      if (percentage == null) {
+        newAnalysis = 'No enough data to compare';
+      }
+      else if (costGoal > lastMonthCost) {
         newAnalysis = 'greater than last month.';
       } else if (costGoal < lastMonthCost) {
         newAnalysis = 'less than last month';

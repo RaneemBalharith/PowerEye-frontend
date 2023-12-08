@@ -21,8 +21,8 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 export const EditPersonalInfoScreen = ({ navigation }) => {
 
-  const { theme } = useContext(ThemeContext);
-  const { image, setImage, email, setUsername, refresh, setRefresh, token } = useContext(PowerEyeContext);
+  const { theme } = useContext(ThemeContext)
+  const { image, setImage, email, setUsername, refresh, setRefresh, token } = useContext(PowerEyeContext)
   const [tempUsername, setTempUsername] = useState("");
   const [powerEyePassword, setPowerEyePassword] = useState("");
   const [merrosPassword, setMerrosPassword] = useState("");

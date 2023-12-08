@@ -1,22 +1,22 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Modal, TextInput, TouchableOpacity, Dimensions, Image , FlatList, ScrollView} from 'react-native';
+import { StyleSheet, Text, View, Modal, TextInput, TouchableOpacity, Dimensions, Image, FlatList, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Card from '../../components/Card';
 import FirstTabViewRoom from '../../components/roomPageAnalysis/firstTabViewRoom';
 import { FontAwesome5 } from '@expo/vector-icons';
 import ScrollableCard from '../../components/scrollableCard';
 import AddApplianceButton from '../../components/addApplianceButton';
-import { addApplianceToRoomRequest,getRoomEnergyRequest,updateRoomNameRequest, deleteApplianceFromRoomRequest, getRoomAppliancesRequest } from '../../api/apiManager';
+import { addApplianceToRoomRequest, getRoomEnergyRequest, updateRoomNameRequest, deleteApplianceFromRoomRequest, getRoomAppliancesRequest } from '../../api/apiManager';
 import { PowerEyeContext } from '../../services/powerEye.context';
 import { DeviceCardSwiper } from './deviceCardsSwiper';
 import AddNewRoom from '../../components/AddNewRoom';
-export const Room = ({navigation,route}) => {
+export const Room = ({ navigation, route }) => {
   const [showAddModal, setShowAddModal] = useState(false);
-  console.log("roomroute",route.params.room.id)
-  const {token,appliance_ids,convertEnergyToCO2e,convertEnergyToCost,setAppliance_ids,rooms,refresh,roomAppliances, setRoomAppliances,setRefresh} = useContext(PowerEyeContext)
+  console.log("roomroute", route.params.room.id)
+  const { token, appliance_ids, convertEnergyToCO2e, convertEnergyToCost, setAppliance_ids, rooms, refresh, roomAppliances, setRoomAppliances, setRefresh } = useContext(PowerEyeContext)
   const [roomName, setRoomName] = useState('Room'); // Set an initial room name
-  const [appliances ,setAppliances]= useState([]);
-  const [roomEnergy , setRoomEnergy]= useState(0);
+  const [appliances, setAppliances] = useState([]);
+  const [roomEnergy, setRoomEnergy] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [updatedRoomName, setUpdatedRoomName] = useState('');
@@ -25,8 +25,8 @@ export const Room = ({navigation,route}) => {
     if (updatedRoomName.length < 2) {
       setError('Name should be at least two characters');
     } else {
-      updateRoomNameRequest(token , route.params.room.id ,updatedRoomName ).then((res)=>{
-        console.log('room name changed',updatedRoomName)
+      updateRoomNameRequest(token, route.params.room.id, updatedRoomName).then((res) => {
+        console.log('room name changed', updatedRoomName)
         setRefresh('room name refresh')
       })
 
@@ -40,65 +40,65 @@ export const Room = ({navigation,route}) => {
     setModalVisible(true);
   };
 
-const onRemoveApplianceFromRoom =(appliance_id)=>{
-  console.log('this is deleting  appliance from room',route.params.room.id , 'appliance' ,appliance_id)
-  deleteApplianceFromRoomRequest(token,route.params.room.id,appliance_id ).then((res)=>{
-    console.log('this is deleting  appliance from room',res)
-    setRefresh('this is deleting  appliance from room')
-  })
-}
-const handleOnAddAplianceToThisRoom = () => {
-  setShowAddModal(false);
-  addApplianceToRoomRequest(token,route.params.room.id,appliance_ids).then((res)=>{
-    setAppliance_ids([])
-    console.log('this is adding new appliance to room',res)
-    setRefresh('this is adding new appliance to room')
-  })
-
-};
-
-const handleCloseModal = () => {
-  setShowAddModal(false);
-
-};
-
-useEffect(()=>{
-  getRoomAppliancesRequest(token,route.params.room.id).then((res)=>{
-    setRoomAppliances(res["appliances"])
-    
-  })
-  getRoomEnergyRequest(token ,route.params.room.id ,'daily' ).then((res)=>{
-    if(res){
-    setRoomEnergy(res)
-  }else{
-    setRoomEnergy(0)
+  const onRemoveApplianceFromRoom = (appliance_id) => {
+    console.log('this is deleting  appliance from room', route.params.room.id, 'appliance', appliance_id)
+    deleteApplianceFromRoomRequest(token, route.params.room.id, appliance_id).then((res) => {
+      console.log('this is deleting  appliance from room', res)
+      setRefresh('this is deleting  appliance from room')
+    })
   }
-  })
-},[route])
-useEffect(()=>{
-  getRoomAppliancesRequest(token,route.params.room.id).then((res)=>{
-    setAppliances(res["appliances"])
-    console.log('this is the added appliances:',res["appliances"])
-  })
-},[refresh])
+  const handleOnAddAplianceToThisRoom = () => {
+    setShowAddModal(false);
+    addApplianceToRoomRequest(token, route.params.room.id, appliance_ids).then((res) => {
+      setAppliance_ids([])
+      console.log('this is adding new appliance to room', res)
+      setRefresh('this is adding new appliance to room')
+    })
+
+  };
+
+  const handleCloseModal = () => {
+    setShowAddModal(false);
+
+  };
+
+  useEffect(() => {
+    getRoomAppliancesRequest(token, route.params.room.id).then((res) => {
+      setRoomAppliances(res["appliances"])
+
+    })
+    getRoomEnergyRequest(token, route.params.room.id, 'daily').then((res) => {
+      if (res) {
+        setRoomEnergy(res)
+      } else {
+        setRoomEnergy(0)
+      }
+    })
+  }, [route])
+  useEffect(() => {
+    getRoomAppliancesRequest(token, route.params.room.id).then((res) => {
+      setAppliances(res["appliances"])
+      console.log('this is the added appliances:', res["appliances"])
+    })
+  }, [refresh])
   return (
     <View style={styles.container}>
       <View>
-      <Modal visible={showAddModal} animationType="slide" transparent={true}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <AddNewRoom onAdd={handleOnAddAplianceToThisRoom} onCancel={handleCloseModal} />
-            <View style={styles.modalButtonsContainer}>
-            <TouchableOpacity style={[styles.modalButton, styles.nextButton]} onPress={handleOnAddAplianceToThisRoom}>
-                <Text style={styles.nextButtonText}>add</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.modalButton} onPress={handleCloseModal}>
-                <Text style={styles.modalButtonText}>Cancel</Text>
-              </TouchableOpacity>
+        <Modal visible={showAddModal} animationType="slide" transparent={true}>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <AddNewRoom onAdd={handleOnAddAplianceToThisRoom} onCancel={handleCloseModal} />
+              <View style={styles.modalButtonsContainer}>
+                <TouchableOpacity style={[styles.modalButton, styles.nextButton]} onPress={handleOnAddAplianceToThisRoom}>
+                  <Text style={styles.nextButtonText}>add</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.modalButton} onPress={handleCloseModal}>
+                  <Text style={styles.modalButtonText}>Cancel</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
         <View style={styles.header}>
           <Ionicons name="arrow-back-outline" size={35} color="#00707C" style={styles.backArrow} onPress={() => navigation.goBack()} />
           {isEditing ? (
@@ -111,22 +111,22 @@ useEffect(()=>{
           )}
         </View>
       </View>
-      <View style={{flexDirection: 'row', justifyContent:'space-between'}}>
-        <View style={{height:150,flex:1}}>
-        <Text style={{ paddingTop: 20, paddingLeft: 30, fontSize: 18 }}>Room Devices:  </Text>
-            
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <View style={{ height: 150, flex: 1 }}>
+          <Text style={{ paddingTop: 20, paddingLeft: 30, fontSize: 18 }}>Room Devices:  </Text>
+
           <DeviceCardSwiper devices={appliances} onRemoveApplianceFromRoom={onRemoveApplianceFromRoom} />
 
         </View>
         <View>
-        <AddApplianceButton onPress={()=>setShowAddModal(true)} />
-          </View>
-        
+          <AddApplianceButton onPress={() => setShowAddModal(true)} />
+        </View>
+
       </View>
       <View>
-      
-        </View>   
-   
+
+      </View>
+
       <Text style={{ paddingTop: 10, paddingLeft: 30, fontSize: 18 }}>Today's Analysis:</Text>
       <View style={styles.cardView}>
         <Card style={styles.card}>
@@ -139,12 +139,12 @@ useEffect(()=>{
         </Card>
         <Card style={styles.card}>
           <Text style={styles.cardTitle}>CO2 </Text>
-          <Text style={styles.cardContent}>{convertEnergyToCO2e(roomEnergy) } kg</Text>
+          <Text style={styles.cardContent}>{convertEnergyToCO2e(roomEnergy)} kg</Text>
         </Card>
       </View>
       <View style={styles.tabContainer}>
 
-  <FirstTabViewRoom navigation={navigation} roomid={route.params.room.id} roomName={route.params.room.name}/> 
+        <FirstTabViewRoom navigation={navigation} roomid={route.params.room.id} roomName={route.params.room.name} />
       </View>
 
 
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     shadowColor: 'black',
     shadowOpacity: 0.5,
     shadowRadius: 3,
-   
+
   },
   buttonIcon: {
     marginRight: 3,  // Add some spacing between the icon and text
@@ -248,71 +248,71 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   // Modal Styles
-     // Modal Styles
-     modalContainer: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    modalContent: {
-      backgroundColor: '#FFFFFF',
-      borderRadius: 10,
-      padding: 20,
-      width: 300,
-    },
-    modalTitle: {
-      fontSize: 18,
-      fontWeight: 'bold',
-      marginBottom: 10,
-      textAlign: 'center',
-    },
-    modalInput: {
-      height: 40,
-      borderColor: '#CCCCCC',
-      borderWidth: 1,
-      borderRadius: 5,
-      paddingHorizontal: 10,
-      marginBottom: 10,
-    },
-    modalButtonContainer: {
-      flexDirection: 'row',
-      justifyContent: 'flex-end',
-    },
-    modalButton: {
-      paddingVertical: 8,
-      paddingHorizontal: 12,
-      borderRadius: 5,
-      marginLeft: 10,
-    },
-    cancelButton: {
-      backgroundColor: '#CCCCCC',
-    },
-    saveButton: {
-      backgroundColor: '#00707C',
-    },
-    buttonText: {
-      color: '#FFFFFF',
-      fontSize: 14,
-      fontWeight: 'bold',
-    },
-    inputError: {
-      borderColor: 'red',
-    },
-    errorText: {
-      color: 'red',
-      marginBottom: 10,
-    },
+  // Modal Styles
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    padding: 20,
+    width: 300,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  modalInput: {
+    height: 40,
+    borderColor: '#CCCCCC',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+  },
+  modalButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  modalButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 5,
+    marginLeft: 10,
+  },
+  cancelButton: {
+    backgroundColor: '#CCCCCC',
+  },
+  saveButton: {
+    backgroundColor: '#00707C',
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  inputError: {
+    borderColor: 'red',
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: 10,
+  },
 
-//Modal 2
-    
+  //Modal 2
+
   modalContainer2: {
     flex: 1,
-  justifyContent: 'center',
-  alignItems: 'center',
-  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  modalContent2:{
+  modalContent2: {
     width: 360,
     height: 540,
     backgroundColor: 'white',
@@ -328,7 +328,7 @@ const styles = StyleSheet.create({
   },
   choicesContainer2: {
     flexDirection: 'row',
-   flexWrap: 'wrap',
+    flexWrap: 'wrap',
     justifyContent: 'space-around',
     alignItems: 'center',
   },
@@ -367,7 +367,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textTransform: 'uppercase',
     fontSize: 14,
-    alignItems:'center',
+    alignItems: 'center',
     textAlign: 'center',
     justifyContent: 'center',
   },
@@ -379,77 +379,77 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: '#B43232',
     width: 100,
-    },
-    cancelButtonText2: {
-      color: 'white',
-      fontWeight: 'bold',
-      textTransform: 'uppercase',
-      fontSize: 14,
-      textAlign: 'center',
-      justifyContent: 'center',
+  },
+  cancelButtonText2: {
+    color: 'white',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    fontSize: 14,
+    textAlign: 'center',
+    justifyContent: 'center',
   },
   modalContainer: {
     flex: 1,
-     justifyContent: 'center',
-     alignItems: 'center',
-     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-   },
-   modalContent: {
-     width: 360,
-     height: 540,
-     backgroundColor: 'white',
-     borderRadius: 10,
-     elevation: 5,
-     padding: 20,
-   },
-   modalHeader: {
-     fontSize: 26,
-     fontWeight: 'bold',
-     marginTop: 20,
-     marginLeft: 12,
-     marginBottom: 15,
-     color: "#00707C",
-   },
-   modalSubheader: {
-     fontSize: 18,
-     marginBottom: 40,
-     marginLeft: 12,
-     color: "#45A8AE",
-   },
-   input: {
-     width: '100%',
-     height: 40,
-     borderWidth: 1,
-     borderColor: 'lightgray',
-     borderRadius: 10,
-     paddingHorizontal: 10,
-     marginBottom: 300,
-   },
-   modalButtonsContainer: {
-     flexDirection: 'row',
-     justifyContent: 'flex-end',
-     marginTop: 20,
-   },
-   modalButton: {
-     marginLeft: 10,
-     padding: 3,
-     backgroundColor: 'lightgray',
-     borderRadius: 16,
-     width: 90,
-     height: 30,
-     alignItems: 'center',
-     justifyContent: 'center',
-     borderColor: 'gray',
-     borderWidth: 1,
-   },
-   modalButtonText: {
-     color: 'black',
-     fontWeight: 'bold',
-     alignItems: 'center',
-     justifyContent: 'center',
-   },
-   nextButton: {
-     backgroundColor: "#00707C",
-   },
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: 360,
+    height: 540,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    elevation: 5,
+    padding: 20,
+  },
+  modalHeader: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    marginTop: 20,
+    marginLeft: 12,
+    marginBottom: 15,
+    color: "#00707C",
+  },
+  modalSubheader: {
+    fontSize: 18,
+    marginBottom: 40,
+    marginLeft: 12,
+    color: "#45A8AE",
+  },
+  input: {
+    width: '100%',
+    height: 40,
+    borderWidth: 1,
+    borderColor: 'lightgray',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    marginBottom: 300,
+  },
+  modalButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: 20,
+  },
+  modalButton: {
+    marginLeft: 10,
+    padding: 3,
+    backgroundColor: 'lightgray',
+    borderRadius: 16,
+    width: 90,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: 'gray',
+    borderWidth: 1,
+  },
+  modalButtonText: {
+    color: 'black',
+    fontWeight: 'bold',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  nextButton: {
+    backgroundColor: "#00707C",
+  },
 });
 

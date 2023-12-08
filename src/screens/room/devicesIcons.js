@@ -5,7 +5,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Entypo from "@expo/vector-icons/Entypo";
 import Feather from "@expo/vector-icons/Feather";
-export const Icon = ({ id, color, IconStyle,size }) => {
+export const Icon = ({ id, color, IconStyle, size }) => {
   switch (id) {
     case 1:
       return (
