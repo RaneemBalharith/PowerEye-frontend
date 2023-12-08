@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "PowerEye",
-    "slug": "powereye",
+    "slug": "PowerEye",
     "version": "1.0.0",
     "sdkVersion": "49.0.0",
     "orientation": "portrait",
@@ -50,6 +50,12 @@
       "eas": {
         "projectId": "97252d10-e11a-4985-a248-b19c347152bd"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/97252d10-e11a-4985-a248-b19c347152bd"
     }
   }
 }
