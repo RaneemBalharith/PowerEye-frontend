@@ -124,7 +124,7 @@ export const GoalAchievementScreen = ({ navigation }) => {
                 <Text style={styles.title}>Goal Settings</Text>
               </View>
               <View>
-                <GoalAchievement progress={40} />
+                <GoalAchievement progress={0} />
               </View>
               <View style={styles.GoalAchievementCard}>
                 <View style={styles.CardTitleWrapper}>
