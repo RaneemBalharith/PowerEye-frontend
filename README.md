@@ -1,2 +1,0 @@
-# PowerEye Frontend 
-welcome
