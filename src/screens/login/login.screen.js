@@ -58,10 +58,7 @@ export const LoginScreen = ({ navigation }) => {
           confirmPowerEyePassword: false,
           merossPassword: false,
         });
-        // Display success message or navigate to the next screen
-        
-
-         // for HOME!!!!!!!!!!!!!
+    
       }
     } else {
       setLoginStatus("Please fill in all the fields");

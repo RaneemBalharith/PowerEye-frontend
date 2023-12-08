@@ -25,6 +25,7 @@ export const ProfileScreen = ({ navigation }) => {
   const [deleteAccount, setDeleteAccount] = useState(false);
   const [onModalShow , setOnModalShow] = useState(false)
   return (
+  
     <View style={styles(theme).container}>
       <View style={styles(theme).Profile}>
         {image ? 
@@ -72,6 +73,7 @@ export const ProfileScreen = ({ navigation }) => {
       <DeleteAccount deleteAccount = {deleteAccount} setDeleteAccount={setDeleteAccount} navigation={navigation} />
       <LogoutModal onModalShow={onModalShow} setOnModalShow={setOnModalShow} />
     </View>
+
   );
 };
 const styles = StyleSheet.create((theme)=>({

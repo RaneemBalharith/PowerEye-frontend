@@ -14,8 +14,14 @@ import { Platform } from 'react-native';
 
 export const HomeScreen = ({navigation}) => {
   const {currentMonthEnergy,convertEnergyToCost,smartPlugs,setNavigateTo,screenName} = useContext(PowerEyeContext)
+  
 
   const [onAddDevice,setOnAddDevice] = useState(false);
+
+
+
+  const consumption = 421.8;
+  const cost = (consumption * 0.8).toFixed(2);
   if(screenName){
     navigation.navigate(screenName)
   }
