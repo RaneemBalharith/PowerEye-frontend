@@ -8,7 +8,7 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export const GoalAchievement = () => {
-  const {energyGoal,progress,currentMonthEnergy,convertEnergyToCost,setRefresh, setEnergyGoal} = useContext(PowerEyeContext)
+  const { energyGoal, progress, currentMonthEnergy, convertEnergyToCost, setRefresh, setEnergyGoal } = useContext(PowerEyeContext)
   return (
     <View style={styles.GoalAchievementCard}>
       <View style={styles.CardTitleWrapper}>
@@ -22,16 +22,16 @@ export const GoalAchievement = () => {
       </View>
       <View style={styles.progressBarWarapper}>
         <Text style={styles.progress}>
-            {convertEnergyToCost(currentMonthEnergy)} SAR
+          {convertEnergyToCost(currentMonthEnergy)} SAR
         </Text>
         <GradientProgressBar
-          progress={(currentMonthEnergy/energyGoal)*100}
-          width={windowWidth*0.60}
+          progress={energyGoal > 0 ? (currentMonthEnergy / energyGoal) * 100 : 0}
+          width={windowWidth * 0.60}
           height={7}
           borderRadius={5}
         />
         <Text style={styles.progress}>
-        {convertEnergyToCost(energyGoal != -1 && energyGoal)} SAR
+          {convertEnergyToCost(energyGoal != -1 && energyGoal)} SAR
         </Text>
       </View>
     </View>
@@ -64,15 +64,15 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   progressBarWarapper: {
-    flexDirection:'row',
-    justifyContent:'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: "center",
     marginBottom: 10,
   },
-  progress:{
-    fontSize:10,
-    color:'#00707C',
-    margin:3,
-    fontWeight:'bold',
+  progress: {
+    fontSize: 10,
+    color: '#00707C',
+    margin: 3,
+    fontWeight: 'bold',
   }
 });
