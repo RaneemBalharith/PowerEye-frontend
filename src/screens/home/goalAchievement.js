@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState,useContext } from "react";
 import { View, Text, Image, StyleSheet, Dimensions } from "react-native";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import GradientProgressBar from "./GradientProgressBar";
@@ -7,9 +7,9 @@ import { PowerEyeContext } from "../../services/powerEye.context";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 export const GoalAchievement = () => {
-  const { energyGoal, progress, currentMonthEnergy, convertEnergyToCost } = useContext(PowerEyeContext)
+  const {energyGoal,progress,currentMonthEnergy,convertEnergyToCost} = useContext(PowerEyeContext)
 
-  const { theme } = useContext(ThemeContext)
+  const {theme} = useContext(ThemeContext)
   return (
     <View style={styles(theme).GoalAchievementCard}>
       <View style={styles(theme).CardTitleWrapper}>
@@ -23,22 +23,22 @@ export const GoalAchievement = () => {
       </View>
       <View style={styles(theme).progressBarWarapper}>
         <Text style={styles(theme).progress}>
-          {convertEnergyToCost(currentMonthEnergy)} SR
+            {convertEnergyToCost(currentMonthEnergy)} SR
         </Text>
         <GradientProgressBar
-          progress={energyGoal > 0 ? (currentMonthEnergy / energyGoal) * 100 : 0}
-          width={windowWidth * 0.60}
+          progress={(currentMonthEnergy/energyGoal)*100}
+          width={windowWidth*0.60}
           height={7}
           borderRadius={5}
         />
         <Text style={styles(theme).progress}>
-          {convertEnergyToCost(energyGoal)} SR
+        {convertEnergyToCost(energyGoal)} SR
         </Text>
       </View>
     </View>
   );
 };
-const styles = StyleSheet.create((theme) => ({
+const styles = StyleSheet.create((theme)=>({
   CardTitleWrapper: {
     flexDirection: "row",
     alignItems: "center",
@@ -60,15 +60,15 @@ const styles = StyleSheet.create((theme) => ({
     margin: theme.space[1],
   },
   progressBarWarapper: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection:'row',
+    justifyContent:'center',
     alignItems: "center",
     marginBottom: theme.space[1],
   },
-  progress: {
-    fontSize: theme.sizes[1],
-    color: theme.colors.primary,
-    margin: theme.space[0],
-    fontWeight: theme.fontWeights.bold,
+  progress:{
+    fontSize:theme.sizes[1],
+    color:theme.colors.primary,
+    margin:theme.space[0],
+    fontWeight:theme.fontWeights.bold,
   }
 }));
