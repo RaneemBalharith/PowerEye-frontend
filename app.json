@@ -1,0 +1,55 @@
+{
+  "expo": {
+    "name": "PowerEye",
+    "slug": "powereye",
+    "version": "1.0.0",
+    "sdkVersion": "49.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/logo.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.rem.PowerEye",
+      "googleServicesFile": "./GoogleService-Info.plist"
+    },
+    "android": {
+      "googleServicesFile": "./google-services.json",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.reem_hej.PowerEye",
+      "permissions": [
+        "INTERNET"
+      ]
+    },
+    "plugins": [
+      "@react-native-firebase/app",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ]
+    ],
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "owner": "reem_hej",
+    "extra": {
+      "eas": {
+        "projectId": "97252d10-e11a-4985-a248-b19c347152bd"
+      }
+    }
+  }
+}
