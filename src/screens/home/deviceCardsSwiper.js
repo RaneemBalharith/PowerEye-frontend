@@ -18,7 +18,7 @@ export const DeviceCardSwiper = ({devices,navigation}) => {
   const scrollForward = () => {
     if (flatListRef.current) {
       const newIndex = scrollIndex + 1;
-      if (newIndex < devices.length) {
+      if (newIndex < devices?.length) {
         flatListRef.current.scrollToIndex({ index: newIndex, animated: true });
         setScrollIndex(newIndex);
       }
