@@ -107,7 +107,7 @@ export default function App() {
    
     return unsubscribe;
     
-  }, [])
+  }, [getToken])
 
   return (
     <PowerEyeContextProvider setGetToken={setGetToken} screenName={screenName} notification={notification} setScreenName={setScreenName}>
