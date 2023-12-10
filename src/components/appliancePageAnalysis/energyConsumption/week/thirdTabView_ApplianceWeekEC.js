@@ -1,6 +1,6 @@
 
 
-import React, { useState,useContext,useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Dimensions, StyleSheet, Text, View, ScrollView, useWindowDimensions, Alert } from 'react-native';
 import { TabView, TabBar } from 'react-native-tab-view';
 
@@ -9,7 +9,7 @@ import { ActivityIndicator } from 'react-native-paper';
 import { Barchart } from '../../Barchart';
 const renderTabBar = props => (
     <TabBar
-    
+
         scrollEnabled
         {...props}
         activeColor={'#00707C'}
@@ -21,44 +21,41 @@ const renderTabBar = props => (
 
     />
 );
-export default function ThirdTabView_ApplianceWeekEC({type,weeklyEnergy , weeklyRoute}) {
+export default function ThirdTabView_ApplianceWeekEC({ type, weeklyEnergy, weeklyRoute }) {
     const layout = useWindowDimensions();
-    const {token,applianceId} = useContext(PowerEyeContext)
+    const { token, applianceId } = useContext(PowerEyeContext)
     const [index, setIndex] = React.useState(0);
-    const [data,setData] = useState([]);
+    const [data, setData] = useState([]);
     let routes = weeklyRoute.length ? weeklyRoute : []
-      const renderScene = ({ route }) => {
+    const renderScene = ({ route }) => {
 
         return (
-     <ScrollView>
-        <Barchart type={type} data={weeklyEnergy[route.Key]}/>
-     </ScrollView>
+            <ScrollView>
+                <Barchart type={type} data={weeklyEnergy[route.Key]} />
+            </ScrollView>
         );
-      };
+    };
 
     return (
-      <View style={styles.container}>
-      {
-      
-      weeklyEnergy.length == 0?(
-        <View style={styles.tabContainer}>
-            <ActivityIndicator size={'small'} color='#00707C' />
-        </View>
-        
-        
+        <View style={styles.container}>
+            {
 
-      ):( 
-            <View style={styles.tabContainer}>
-                <TabView
-                    navigationState={{ index, routes }}
-                    renderScene={renderScene}
-                    renderTabBar={renderTabBar}
-                    onIndexChange={setIndex}
-                    initialLayout={{ width: layout.width }}
+                weeklyEnergy != undefined && weeklyEnergy.length == 0 ? (
+                    <View style={styles.tabContainer}>
+                        <ActivityIndicator size={'small'} color='#00707C' />
+                    </View>
+                ) : (
+                    <View style={styles.tabContainer}>
+                        <TabView
+                            navigationState={{ index, routes }}
+                            renderScene={renderScene}
+                            renderTabBar={renderTabBar}
+                            onIndexChange={setIndex}
+                            initialLayout={{ width: layout.width }}
 
-                />
-            </View>
-        )}
+                        />
+                    </View>
+                )}
         </View>
     );
 }
