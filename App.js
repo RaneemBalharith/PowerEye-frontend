@@ -1,27 +1,27 @@
-import React, { useState,useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Alert } from 'react-native';
 import * as Application from 'expo-application';
 import { Platform } from 'react-native';
-import { sentFcmToken} from './src/api/apiManager';
+import { sentFcmToken } from './src/api/apiManager';
 import messaging from '@react-native-firebase/messaging';
 import { Navigation } from "./src/components/navigation";
-import { PowerEyeContextProvider,useMyContext } from "./src/services/powerEye.context";
+import { PowerEyeContextProvider, useMyContext } from "./src/services/powerEye.context";
 import { ThemeContextProvider } from "./src/services/theme.context";
 
- 
+
 export default function App() {
-  const [getToken,setGetToken] = useState()
-  const [notification,setNotifications] = useState()
-  const [screenName , setScreenName] =useState('')
-  
+  const [getToken, setGetToken] = useState()
+  const [notification, setNotifications] = useState()
+  const [screenName, setScreenName] = useState('')
+
   const requestUserPermission = async () => {
     try {
       const authStatus = await messaging().requestPermission();
       const enabled =
         authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
         authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-  
+
       if (enabled) {
         console.log('Authorization status:', authStatus);
         return true;
@@ -34,24 +34,22 @@ export default function App() {
       return false;
     }
   };
-  
+
   useEffect(() => {
     const setupMessaging = async () => {
       const permissionGranted = await requestUserPermission();
-  
+
       if (permissionGranted && getToken) {
         try {
-          
-          console.log(getToken)
           const fcmtoken = await messaging().getToken();
 
           let device_id = Platform.OS === 'ios' ? await Application.getIosIdForVendorAsync() : Application.androidId;
-          
-          sentFcmToken(getToken,fcmtoken,device_id).then((res)=>{
+          console.log(fcmtoken)
+          sentFcmToken(getToken, fcmtoken, device_id).then((res) => {
 
-   
 
-            
+
+
           })
           // Here you have to call the token post API
         } catch (error) {
@@ -60,12 +58,12 @@ export default function App() {
       }
     }
     setupMessaging();
-  
+
     messaging()
       .getInitialNotification()
       .then(async (remoteMessage) => {
         if (remoteMessage) {
-          if(remoteMessage.notification.title == 'Update Your Password'){
+          if (remoteMessage.notification.title == 'Update Your Password') {
             setScreenName('editprofile')
           }
           console.log(
@@ -75,9 +73,9 @@ export default function App() {
           setScreenName('Notification')
         }
       });
-  
+
     messaging().onNotificationOpenedApp(async remoteMessage => {
-      if(remoteMessage.notification.title == 'Update Your Password'){
+      if (remoteMessage.notification.title == 'Update Your Password') {
         setScreenName('editprofile')
       }
       console.log(
@@ -86,34 +84,33 @@ export default function App() {
       );
       // heres the navigation is done
 
-    
+
     });
-  
+
     messaging().setBackgroundMessageHandler(async remoteMessage => {
       console.log('Message handled in the background!', remoteMessage)
       remoteMessage
     });
-  
+
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      if(remoteMessage){
-      setNotifications({title :remoteMessage.notification.title,body :remoteMessage.notification.body,id :remoteMessage.messageId})
-      if(remoteMessage.notification.title == 'Update Your Password'){
-      setScreenName('editprofile')
-    }
-    }
-     
+      if (remoteMessage) {
+        setNotifications({ title: remoteMessage.notification.title, body: remoteMessage.notification.body, id: remoteMessage.messageId })
+        if (remoteMessage.notification.title == 'Update Your Password') {
+          setScreenName('editprofile')
+        }
+      }
+
     });
-   
-   
+
+
     return unsubscribe;
-    
   }, [getToken])
 
   return (
     <PowerEyeContextProvider setGetToken={setGetToken} screenName={screenName} notification={notification} setScreenName={setScreenName}>
       <ThemeContextProvider>
- 
-        <Navigation  />
+
+        <Navigation />
       </ThemeContextProvider>
     </PowerEyeContextProvider>
   );
