@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
+import "react-native-gesture-handler";
 import { StyleSheet, Text, View, Alert } from 'react-native';
 import * as Application from 'expo-application';
 import { Platform } from 'react-native';
@@ -46,10 +47,6 @@ export default function App() {
           let device_id = Platform.OS === 'ios' ? await Application.getIosIdForVendorAsync() : Application.androidId;
           console.log(fcmtoken)
           sentFcmToken(getToken, fcmtoken, device_id).then((res) => {
-
-
-
-
           })
           // Here you have to call the token post API
         } catch (error) {
@@ -63,40 +60,54 @@ export default function App() {
       .getInitialNotification()
       .then(async (remoteMessage) => {
         if (remoteMessage) {
+          setNotifications({ title: remoteMessage.notification.title, body: remoteMessage.notification.body, id: remoteMessage.messageId })
           if (remoteMessage.notification.title == 'Update Your Password') {
             setScreenName('editprofile')
+          } else {
+            setScreenName('Notification')
           }
           console.log(
             'Push notification caused app to open from quit state:',
             remoteMessage.notification,
           );
-          setScreenName('Notification')
         }
       });
 
     messaging().onNotificationOpenedApp(async remoteMessage => {
-      if (remoteMessage.notification.title == 'Update Your Password') {
-        setScreenName('editprofile')
+      if (remoteMessage) {
+        setNotifications({ title: remoteMessage.notification.title, body: remoteMessage.notification.body, id: remoteMessage.messageId })
+        if (remoteMessage.notification.title == 'Update Your Password') {
+          setScreenName('editprofile')
+        } else {
+          setScreenName('Notification')
+        }
+        console.log(
+          'Notification caused app to open from background state:',
+          remoteMessage.notification,
+        );
       }
-      console.log(
-        'Notification caused app to open from background state:',
-        remoteMessage.notification,
-      );
       // heres the navigation is done
-
-
     });
 
     messaging().setBackgroundMessageHandler(async remoteMessage => {
-      console.log('Message handled in the background!', remoteMessage)
-      remoteMessage
-    });
+      if (remoteMessage) {
+        setNotifications({ title: remoteMessage.notification.title, body: remoteMessage.notification.body, id: remoteMessage.messageId })
+        if (remoteMessage.notification.title == 'Update Your Password') {
+          setScreenName('editprofile')
+        } else {
+          setScreenName('Notification')
+        }
+        console.log('Message handled in the background!', remoteMessage.notification)
 
+      }
+    });
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       if (remoteMessage) {
         setNotifications({ title: remoteMessage.notification.title, body: remoteMessage.notification.body, id: remoteMessage.messageId })
         if (remoteMessage.notification.title == 'Update Your Password') {
           setScreenName('editprofile')
+        } else {
+          setScreenName('Notification')
         }
       }
 
