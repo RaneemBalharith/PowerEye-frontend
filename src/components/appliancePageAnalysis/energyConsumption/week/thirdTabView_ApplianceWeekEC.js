@@ -40,7 +40,7 @@ export default function ThirdTabView_ApplianceWeekEC({ type, weeklyEnergy, weekl
         <View style={styles.container}>
             {
 
-                weeklyEnergy != undefined && weeklyEnergy.length == 0 ? (
+                weeklyEnergy.length == 0 ? (
                     <View style={styles.tabContainer}>
                         <ActivityIndicator size={'small'} color='#00707C' />
                     </View>
