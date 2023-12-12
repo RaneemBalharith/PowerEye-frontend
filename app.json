@@ -2,7 +2,7 @@
   "expo": {
     "name": "PowerEye",
     "slug": "powereye",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
